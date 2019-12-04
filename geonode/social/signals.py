@@ -135,7 +135,7 @@ def activity_post_modify_object(sender, instance, created=None, **kwargs):
     if verb:
         try:
             activity.send(action.get('actor'),
-                          verb=u"{verb}".format(verb=verb),
+                          verb="{verb}".format(verb=verb),
                           action_object=action.get('action_object'),
                           target=action.get('target', None),
                           object_name=action.get('object_name'),
@@ -242,29 +242,29 @@ if relationships and has_notifications:
 def json_serializer_producer(dictionary):
     output = {}
     # pop no useful information for others services which wants to connect to geonode
-    if 'supplemental_information_en' in dictionary.keys():
+    if 'supplemental_information_en' in list(dictionary.keys()):
         dictionary.pop('supplemental_information_en', None)
-    if 'supplemental_information' in dictionary.keys():
+    if 'supplemental_information' in list(dictionary.keys()):
         dictionary.pop('supplemental_information', None)
-    if 'doc_file' in dictionary.keys():
+    if 'doc_file' in list(dictionary.keys()):
         file_object = dictionary['doc_file']
         dictionary['doc_file'] = str(file_object)
-    if 'regions' in dictionary.keys():
+    if 'regions' in list(dictionary.keys()):
         keys = dictionary['regions']
         dictionary['regions'] = str(keys)
-    if 'keywords' in dictionary.keys():
+    if 'keywords' in list(dictionary.keys()):
         keys = dictionary['keywords']
         dictionary['keywords'] = str(keys)
-    if 'tkeywords' in dictionary.keys():
+    if 'tkeywords' in list(dictionary.keys()):
         keys = dictionary['tkeywords']
         dictionary['tkeywords'] = str(keys)
-    if 'styles' in dictionary.keys():
+    if 'styles' in list(dictionary.keys()):
         keys = dictionary['styles']
         dictionary['styles'] = str(keys)
-    if 'contacts' in dictionary.keys():
+    if 'contacts' in list(dictionary.keys()):
         keys = dictionary['contacts']
         dictionary['contacts'] = str(keys)
-    for (x, y) in dictionary.items():
+    for (x, y) in list(dictionary.items()):
         if not y:
             # this is used to solve
             # TypeError: [] is not JSON serializable when it is null
