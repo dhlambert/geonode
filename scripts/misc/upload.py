@@ -33,4 +33,4 @@ k.key = file_name.split('/')[-1]
 k.set_contents_from_filename(file_name)
 k.set_acl('public-read')
 
-print file_name + " uploaded to " + bucket_name
+print(file_name + " uploaded to " + bucket_name)

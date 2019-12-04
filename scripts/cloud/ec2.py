@@ -31,7 +31,7 @@
 #     ec2.py launch 
 import os, time, boto
 import sys
-import ConfigParser
+import configparser
 
 CONFIG_FILE=".gnec2.cfg"
 
@@ -87,7 +87,7 @@ def writeconfig(config):
  
 def readconfig(default_ami=None):
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
 
     # If there is no config file, let's write one.
     if not os.path.exists(CONFIG_FILE):
@@ -133,7 +133,7 @@ def launch():
     if config.has_option('ec2', 'HOST'):
         host = config.get('ec2', 'HOST')
         if host != "" and host is not None:
-            print "there is already an instance launched"
+            print("there is already an instance launched")
             launch = False
             return
  
@@ -161,32 +161,32 @@ def launch():
         except ValueError:
             # this probably means the key is not defined
             # get the first one in the belt for now:
-            print "GeoNode file not found in the server"
+            print("GeoNode file not found in the server")
             geonode_key = conn.get_all_key_pairs()[0]
 
         reservation = image.run(security_groups=[geonode_group,], key_name=geonode_key.name, instance_type=INSTANCE_TYPE)
         instance = reservation.instances[0]
 
-        print "Firing up instance"
+        print("Firing up instance")
 
         # Give it 10 minutes to appear online
         for i in range(120):
             time.sleep(5)
             instance.update()
-            print instance.state
+            print(instance.state)
             if instance.state == "running":
                 break
 
         if instance.state == "running":
             dns = instance.dns_name
-            print "Instance up and running at %s" % dns
+            print("Instance up and running at %s" % dns)
 
         config.set('ec2', 'HOST', dns)
         config.set('ec2', 'INSTANCE', instance.id)
         writeconfig(config)
         
-        print "ssh -i %s ubuntu@%s" % (KEY_PATH, dns)
-        print "Terminate the instance via the web interface %s" % instance
+        print("ssh -i %s ubuntu@%s" % (KEY_PATH, dns))
+        print("Terminate the instance via the web interface %s" % instance)
 
         time.sleep(20)
  
@@ -201,13 +201,13 @@ def terminate():
             if ins.id == instance_id:
                 instance = ins
 
-    print 'Terminating instance'
+    print('Terminating instance')
     instance.terminate()
     # Give it 10 minutes to terminate
     for i in range(120):
         time.sleep(5)
         instance.update()
-        print instance.state
+        print(instance.state)
         if instance.state == "terminated":
             config.set('ec2', 'HOST', '')
             config.set('ec2', 'INSTANCE', '')
@@ -226,9 +226,9 @@ elif sys.argv[1] == "terminate":
     terminate()
 elif sys.argv[1] == "host":
     config = readconfig()
-    print config.get('ec2', 'HOST')
+    print(config.get('ec2', 'HOST'))
 elif sys.argv[1] == "key":
     config = readconfig()
-    print config.get('ec2', 'KEY_PATH')
+    print(config.get('ec2', 'KEY_PATH'))
 else:
-    print "Usage:\n    python %s launch_base\n     python %s launch_geonode\n    python %s terminate" % (sys.argv[0], sys.argv[0], sys.argv[0])
+    print("Usage:\n    python %s launch_base\n     python %s launch_geonode\n    python %s terminate" % (sys.argv[0], sys.argv[0], sys.argv[0]))
