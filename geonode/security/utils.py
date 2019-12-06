@@ -25,7 +25,7 @@ import json
 import logging
 import traceback
 import requests
-import models
+from . import models
 
 from six import string_types
 from requests.auth import HTTPBasicAuth
