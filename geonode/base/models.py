@@ -1250,7 +1250,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         if not no_custom_permissions:
             logger.debug(
                 'There are no permissions for this object, setting default perms.')
-            self.set_default_permissions()
+            # self.set_default_permissions()
 
         user = None
         if self.owner:

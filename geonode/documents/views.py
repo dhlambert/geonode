@@ -57,6 +57,7 @@ from geonode.groups.models import GroupProfile
 from geonode.base.views import batch_modify
 from geonode.monitoring import register_event
 from geonode.monitoring.models import EventType
+from django.core.exceptions import ObjectDoesNotExist
 
 logger = logging.getLogger("geonode.documents.views")
 
@@ -127,13 +128,13 @@ def document_detail(request, docid):
         if document.group:
             try:
                 group = GroupProfile.objects.get(slug=document.group.name)
-            except GroupProfile.DoesNotExist:
+            except ObjectDoesNotExist:
                 group = None
         context_dict = {
             'perms_list': get_perms(
                 request.user,
                 document.get_self_resource()) + get_perms(request.user, document),
-            'permissions_json': _perms_info_json(document),
+            # 'permissions_json': _perms_info_json(document),
             'resource': document,
             'group': group,
             'metadata': metadata,
@@ -724,7 +725,7 @@ def document_metadata_detail(
     if document.group:
         try:
             group = GroupProfile.objects.get(slug=document.group.name)
-        except GroupProfile.DoesNotExist:
+        except ObjectDoesNotExist:
             group = None
     site_url = settings.SITEURL.rstrip('/') if settings.SITEURL.startswith('http') else settings.SITEURL
     register_event(request, EventType.EVENT_VIEW_METADATA, document)

@@ -1844,7 +1844,7 @@ if os.name == 'nt':
 # e.g. THESAURUS = {'name':'inspire_themes', 'required':True, 'filter':True}
 # Required: (boolean, optional, default false) mandatory while editing metadata (not implemented yet)
 # Filter: (boolean, optional, default false) a filter option on that thesaurus will appear in the main search page
-# THESAURUS = {'name': 'inspire_themes', 'required': True, 'filter': True}
+THESAURUS = {'name': 'inspire_themes', 'required': True, 'filter': True}
 
 # Each uploaded Layer must be approved by an Admin before becoming visible
 ADMIN_MODERATE_UPLOADS = ast.literal_eval(os.environ.get('ADMIN_MODERATE_UPLOADS', 'False'))

@@ -27,8 +27,10 @@ from geonode.base.models import (
 )
 from django.template import Template, Context
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+import importlib
+
+importlib.reload(sys)
+# sys.setdefaultencoding('utf-8')
 
 
 class ThumbnailTests(GeoNodeBaseTestSupport):

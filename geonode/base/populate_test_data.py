@@ -46,11 +46,9 @@ import six
 # primarily used as a first step to generate the json data for the fixture using
 # django's dumpdata
 
-imgfile = StringIO(
-    'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00'
-    '\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
-)
-f = SimpleUploadedFile('test_img_file.gif', imgfile.read(), 'image/gif')
+imgfile = b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
+
+f = SimpleUploadedFile(b'test_img_file.gif', imgfile, b'image/gif')
 
 
 def all_public():
@@ -182,6 +180,7 @@ def create_models(type=None):
                     srid='EPSG:4326',
                     category=category,
                     )
+
             m.save()
             obj_ids.append(m.id)
             for kw in kws:

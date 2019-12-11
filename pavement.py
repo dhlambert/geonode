@@ -1206,10 +1206,9 @@ def kill(arg1, arg2):
 
         running = False
         for line in lines:
+            line = str(line)
             # this kills all java.exe and python including self in windows
-            if ('%s' %
-                arg2 in line) or (os.name == 'nt' and '%s' %
-                                  arg1 in line):
+            if ('%s' % arg2 in line) or (os.name == 'nt' and '%s' % arg1 in line):
                 running = True
 
                 # Get pid
