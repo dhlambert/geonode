@@ -65,9 +65,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
     def setUp(self):
         super(DocumentsTest, self).setUp()
         create_models('map')
-        self.imgfile = io.BytesIO(
-            b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00'
-            '\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;')
+        self.imgfile = b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
         self.anonymous_user = get_anonymous_user()
 
     def test_create_document_with_no_rel(self):
@@ -75,7 +73,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
 
         f = SimpleUploadedFile(
             'test_img_file.gif',
-            self.imgfile.read(),
+            self.imgfile,
             'image/gif')
 
         superuser = get_user_model().objects.get(pk=2)
@@ -563,7 +561,7 @@ class DocumentResourceLinkTestCase(GeoNodeBaseTestSupport):
 
         self.test_file = io.BytesIO(
             b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00'
-            '\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
+            b'\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
         )
 
     def test_create_document_with_links(self):

@@ -615,7 +615,7 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
         'perms_list': get_perms(
             request.user,
             layer.get_self_resource()) + get_perms(request.user, layer),
-        "permissions_json": _perms_info_json(layer),
+        # "permissions_json": _perms_info_json(layer),
         "documents": get_related_documents(layer),
         "metadata": metadata,
         "is_layer": True,

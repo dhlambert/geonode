@@ -66,8 +66,8 @@ class GeoNodeBaseTestSupport(TestCase):
         ]
 
     @classproperty
-    def get_type(cls):
-        return cls.type
+    def get_type(self):
+        return self
 
     @classproperty
     def get_obj_ids(cls):

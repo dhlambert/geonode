@@ -493,6 +493,8 @@ def remove_object_permissions(instance):
 
     from guardian.models import UserObjectPermission, GroupObjectPermission
     resource = instance.get_self_resource()
+    print("resource..............//////////...........//////////.............")
+    # print(instance)
     if hasattr(resource, "layer"):
         try:
             UserObjectPermission.objects.filter(
