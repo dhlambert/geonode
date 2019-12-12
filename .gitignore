@@ -63,7 +63,7 @@ master
 slave
 
 # virtual env
-venv
+venv*
 geonode/bin/
 geonode/djcelery/
 geonode/include/

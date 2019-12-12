@@ -77,14 +77,14 @@ geonode-oauth-toolkit==1.1.4.6
 git+git://github.com/GeoNode/django-geoexplorer.git#egg=django-geoexplorer
 
 #django-mapstore-adapter==1.0.13
-git+git://github.com/dhlambert/django-mapstore-adapter.git@5fe469da015ba619aa982a8b89ba3136fc83a96a#egg=django-mapstore-adapter
+git+git://github.com/dhlambert/django-mapstore-adapter.git@py3-compatibility-migrations#egg=django-mapstore-adapter
 
 # django-geonode-mapstore-client==1.4.6
 git+git://github.com/GeoNode/geonode-mapstore-client.git#egg=django-geonode-mapstore-client
 django-geonode-client==1.0.9
 geonode-user-messages==0.1.14
 #geonode-avatar==2.1.8
-git+git://github.com/mtnorthcott/geonode-avatar.git@744e60d5635c544458015aac41d2a9b80e0d69d5#egg=geonode-avatar
+git+git://github.com/mtnorthcott/geonode-avatar.git@py3_upgrade#egg=geonode-avatar
 geonode-announcements==1.0.13
 arcrest>=10.0
 geonode-dialogos==3.0
