@@ -223,7 +223,8 @@ def update_documents_extent(sender, **kwargs):
 
 
 def pre_delete_document(instance, sender, **kwargs):
-    remove_object_permissions(instance.get_self_resource())
+    pass
+    # remove_object_permissions(instance.get_self_resource())
 
 
 signals.pre_save.connect(pre_save_document, sender=Document)
