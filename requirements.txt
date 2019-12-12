@@ -77,7 +77,7 @@ geonode-oauth-toolkit==1.1.4.6
 git+git://github.com/GeoNode/django-geoexplorer.git#egg=django-geoexplorer
 
 #django-mapstore-adapter==1.0.13
-git+git://github.com/dhlambert/django-mapstore-adapter.git@py3-compatibility-migrations#egg=django-mapstore-adapter
+git+git://github.com/mtnorthcott/django-mapstore-adapter.git@py3#egg=django-mapstore-adapter
 
 # django-geonode-mapstore-client==1.4.6
 git+git://github.com/GeoNode/geonode-mapstore-client.git#egg=django-geonode-mapstore-client

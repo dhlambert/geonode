@@ -22,6 +22,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from geonode.groups.models import GroupProfile
 from guardian.shortcuts import assign_perm, get_groups_with_perms
 
@@ -88,25 +89,25 @@ class PermissionLevelMixin(object):
 
         # TODO very hugly here, but isn't huglier
         # to set layer permissions to resource base?
-        if hasattr(self, "layer"):
+        try:
             info_layer = {
-                'users': get_users_with_perms(
-                    self.layer),
-                'groups': get_groups_with_perms(
-                    self.layer,
-                    attach_perms=True)}
+                'users': get_users_with_perms(self.layer),
+                'groups': get_groups_with_perms(self.layer, attach_perms=True)
+            }
+        except (AttributeError, ObjectDoesNotExist):
+            return info
 
-            for user in info_layer['users']:
-                if user in info['users']:
-                    info['users'][user] = info['users'][user] + info_layer['users'][user]
-                else:
-                    info['users'][user] = info_layer['users'][user]
+        for user in info_layer['users']:
+            if user in info['users']:
+                info['users'][user] = info['users'][user] + info_layer['users'][user]
+            else:
+                info['users'][user] = info_layer['users'][user]
 
-            for group in info_layer['groups']:
-                if group in info['groups']:
-                    info['groups'][group] = info['groups'][group] + info_layer['groups'][group]
-                else:
-                    info['groups'][group] = info_layer['groups'][group]
+        for group in info_layer['groups']:
+            if group in info['groups']:
+                info['groups'][group] = info['groups'][group] + info_layer['groups'][group]
+            else:
+                info['groups'][group] = info_layer['groups'][group]
 
         return info
 
