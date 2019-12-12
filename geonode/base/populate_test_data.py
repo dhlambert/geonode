@@ -48,7 +48,7 @@ import six
 
 imgfile = b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
 
-f = SimpleUploadedFile(b'test_img_file.gif', imgfile, b'image/gif')
+f = SimpleUploadedFile('test_img_file.gif', imgfile, b'image/gif')
 
 
 def all_public():
@@ -186,7 +186,6 @@ def create_models(type=None):
             for kw in kws:
                 m.keywords.add(kw)
                 m.save()
-
     if not type or type == 'document':
         for dd, user in zip(document_data, cycle(users)):
             title, abstract, kws, (bbox_x0, bbox_x1, bbox_y0, bbox_y1), category = dd
@@ -200,6 +199,7 @@ def create_models(type=None):
                          srid='EPSG:4326',
                          category=category,
                          doc_file=f)
+
             m.save()
             obj_ids.append(m.id)
             for kw in kws:
