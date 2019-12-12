@@ -33,6 +33,7 @@ except ImportError:
 
 from requests.auth import HTTPBasicAuth
 from xmltodict import parse as parse_xml
+from six import text_types
 
 from django.conf import settings
 from django.core.management import call_command
@@ -234,7 +235,7 @@ class Command(BaseCommand):
                     for item in tree:
                         for found in find_external(item, key=key):
                             yield found
-                elif isinstance(tree, str):
+                elif isinstance(tree, text_types):
                     text = tree.encode('utf-8')
                     for find in (match_fileurl, match_filename):
                         found = find(key, text)

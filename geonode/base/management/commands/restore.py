@@ -100,8 +100,8 @@ class Command(BaseCommand):
         geoserver_bk_file = os.path.join(target_folder, 'geoserver_catalog.zip')
 
         if not os.path.exists(geoserver_bk_file):
-            print(('Skipping geoserver restore: ' +
-                  'file "{}" not found.'.format(geoserver_bk_file)))
+            print('Skipping geoserver restore: ' +
+                  'file "{}" not found.'.format(geoserver_bk_file))
             return
 
         print("Restoring 'GeoServer Catalog ["+url+"]' into '"+geoserver_bk_file+"'.")
@@ -169,8 +169,8 @@ class Command(BaseCommand):
 
                 gs_data_folder = os.path.join(target_folder, 'gs_data_dir', 'data', 'geonode')
                 if not os.path.exists(gs_data_folder):
-                    print(('Skipping geoserver raster data restore: ' +
-                          'directory "{}" not found.'.format(gs_data_folder)))
+                    print('Skipping geoserver raster data restore: ' +
+                          'directory "{}" not found.'.format(gs_data_folder))
                     return
 
                 # Restore '$config.gs_data_dir/data/geonode'
@@ -295,18 +295,18 @@ class Command(BaseCommand):
                 locale_files_folders = os.path.join(target_folder, helpers.LOCALE_PATHS)
 
                 try:
-                    print(("[Sanity Check] Full Write Access to '{}' ...".format(media_root)))
+                    print("[Sanity Check] Full Write Access to '{}' ...".format(media_root))
                     chmod_tree(media_root)
-                    print(("[Sanity Check] Full Write Access to '{}' ...".format(static_root)))
+                    print("[Sanity Check] Full Write Access to '{}' ...".format(static_root))
                     chmod_tree(static_root)
                     for static_files_folder in static_folders:
-                        print(("[Sanity Check] Full Write Access to '{}' ...".format(static_files_folder)))
+                        print("[Sanity Check] Full Write Access to '{}' ...".format(static_files_folder))
                         chmod_tree(static_files_folder)
                     for template_files_folder in template_folders:
-                        print(("[Sanity Check] Full Write Access to '{}' ...".format(template_files_folder)))
+                        print("[Sanity Check] Full Write Access to '{}' ...".format(template_files_folder))
                         chmod_tree(template_files_folder)
                     for locale_files_folder in locale_folders:
-                        print(("[Sanity Check] Full Write Access to '{}' ...".format(locale_files_folder)))
+                        print("[Sanity Check] Full Write Access to '{}' ...".format(locale_files_folder))
                         chmod_tree(locale_files_folder)
                 except:
                     print("...Sanity Checks on Folder failed. Please make sure that the current user has full WRITE access to the above folders (and sub-folders or files).")

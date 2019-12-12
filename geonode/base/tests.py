@@ -27,10 +27,14 @@ from geonode.base.models import (
 )
 from django.template import Template, Context
 
-import importlib
+try:
+    from importlib import reload
+except ImportError:
+    # Python 2.x and <=3.3 compatibility
+    from imp import reload
 
-importlib.reload(sys)
-# sys.setdefaultencoding('utf-8')
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 class ThumbnailTests(GeoNodeBaseTestSupport):

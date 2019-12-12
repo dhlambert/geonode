@@ -24,10 +24,7 @@ from django.conf import settings
 from django.core.management import call_command
 from django.template.response import TemplateResponse
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import BytesIO
 
 from autocomplete_light.forms import ModelForm
 from autocomplete_light.forms import modelform_factory
@@ -103,7 +100,7 @@ def run(self, request, queryset):
         if request.POST.get("post"):
             for siteObj in queryset:
                 self.message_user(request, "Executed Backup: " + siteObj.name)
-                out = StringIO()
+                out = BytesIO()
                 call_command(
                     'backup',
                     force_exec=True,
@@ -140,7 +137,7 @@ def restore(self, request, queryset):
         if request.POST.get("post"):
             for siteObj in queryset:
                 self.message_user(request, "Executed Restore: " + siteObj.name)
-                out = StringIO()
+                out = BytesIO()
                 if siteObj.location:
                     call_command(
                         'restore', force_exec=True, backup_file=str(
