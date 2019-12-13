@@ -47,16 +47,16 @@ class CatalogueTest(GeoNodeBaseTestSupport):
         self.assertEqual(len1, len2, 'Expected equality of json and repository lengths')
 
         record_keys = [
-            u'publisher',
-            u'identifier',
-            u'description',
-            u'keyword',
-            u'title',
-            u'modified',
-            u'contactPoint',
-            u'accessLevel',
-            u'mbox',
-            u'distribution',
+            'publisher',
+            'identifier',
+            'description',
+            'keyword',
+            'title',
+            'modified',
+            'contactPoint',
+            'accessLevel',
+            'mbox',
+            'distribution',
         ]
 
         for record in data_json:

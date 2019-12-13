@@ -139,8 +139,8 @@ class TopicCategory(models.Model):
     is_choice = models.BooleanField(default=True)
     fa_class = models.CharField(max_length=64, default='fa-times')
 
-    def __unicode__(self):
-        return u"{}".format(self.gn_description)
+    def __str__(self):
+        return "{}".format(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -159,8 +159,8 @@ class SpatialRepresentationType(models.Model):
     gn_description = models.CharField('GeoNode description', max_length=255)
     is_choice = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return u"{}".format(self.gn_description)
+    def __str__(self):
+        return "{}".format(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -212,8 +212,8 @@ class Region(MPTTModel):
         null=False,
         default='EPSG:4326')
 
-    def __unicode__(self):
-        return u"{}".format(self.name)
+    def __str__(self):
+        return "{}".format(self.name)
 
     @property
     def bbox(self):
@@ -261,8 +261,8 @@ class RestrictionCodeType(models.Model):
     gn_description = models.TextField('GeoNode description', max_length=255)
     is_choice = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return u"{}".format(self.gn_description)
+    def __str__(self):
+        return "{}".format(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -290,8 +290,8 @@ class License(models.Model):
     url = models.URLField(max_length=2000, null=True, blank=True)
     license_text = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
-        return u"{}".format(self.name)
+    def __str__(self):
+        return "{}".format(self.name)
 
     @property
     def name_long(self):
@@ -425,8 +425,8 @@ class Thesaurus(models.Model):
 
     slug = models.CharField(max_length=64, default='')
 
-    def __unicode__(self):
-        return u"{}".format(self.identifier)
+    def __str__(self):
+        return "{}".format(self.identifier)
 
     class Meta:
         ordering = ("identifier",)
@@ -446,8 +446,8 @@ class ThesaurusKeywordLabel(models.Model):
 
     keyword = models.ForeignKey('ThesaurusKeyword', related_name='keyword')
 
-    def __unicode__(self):
-        return u"{}".format(self.label)
+    def __str__(self):
+        return "{}".format(self.label)
 
     class Meta:
         ordering = ("keyword", "lang")
@@ -470,8 +470,8 @@ class ThesaurusKeyword(models.Model):
 
     thesaurus = models.ForeignKey('Thesaurus', related_name='thesaurus')
 
-    def __unicode__(self):
-        return u"{}".format(self.alt_label)
+    def __str__(self):
+        return "{}".format(self.alt_label)
 
     @property
     def labels(self):
@@ -775,8 +775,8 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
-        return u"{}".format(self.title)
+    def __str__(self):
+        return "{}".format(self.title)
 
     # fields controlling security state
     dirty_state = models.BooleanField(
@@ -1388,7 +1388,7 @@ class Link(models.Model):
 
     objects = LinkManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "{0} link".format(self.link_type)
 
 
@@ -1401,8 +1401,8 @@ class MenuPlaceholder(models.Model):
         unique=True
     )
 
-    def __unicode__(self):
-        return u"{}".format(self.name)
+    def __str__(self):
+        return "{}".format(self.name)
 
     def __str__(self):
         return self.name
@@ -1424,8 +1424,8 @@ class Menu(models.Model):
         null=False,
     )
 
-    def __unicode__(self):
-        return u"{}".format(self.title)
+    def __str__(self):
+        return "{}".format(self.title)
 
     def __str__(self):
         return self.title
@@ -1460,8 +1460,8 @@ class MenuItem(models.Model):
         blank=False
     )
 
-    def __unicode__(self):
-        return u"{}".format(self.title)
+    def __str__(self):
+        return "{}".format(self.title)
 
     def __str__(self):
         return self.title

@@ -89,7 +89,7 @@ class Map(ResourceBase, GXPMapBase):
         blank=True)
     # Full URL for featured map view, ie http://domain/someview
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s by %s' % (
             self.title, (self.owner.username if self.owner else "<Anonymous>"))
 
@@ -549,7 +549,7 @@ class MapLayer(models.Model, GXPLayerBase):
     class Meta:
         ordering = ["stack_order"]
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s?layers=%s' % (self.ows_url, self.name)
 
 

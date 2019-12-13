@@ -660,7 +660,7 @@ def gs_slurp(
                 "storeType": the_store.resource_type,
                 "alternate": "%s:%s" % (workspace.name.encode('utf-8'), resource.name.encode('utf-8')),
                 "title": resource.title or 'No title provided',
-                "abstract": resource.abstract or u"{}".format(_('No abstract provided')).encode('utf-8'),
+                "abstract": resource.abstract or "{}".format(_('No abstract provided')).encode('utf-8'),
                 "owner": owner,
                 "uuid": str(uuid.uuid4())
             })
@@ -1514,7 +1514,7 @@ class OGC_Server(object):
     def netloc(self):
         return urlsplit(self.LOCATION).netloc
 
-    def __unicode__(self):
+    def __str__(self):
         return self.alias
 
 
@@ -1950,7 +1950,7 @@ def _render_thumbnail(req_body, width=240, height=180):
         # don't use keyword for errors - 2.6 compat
         # though unicode accepts them (as seen below)
         data = data.encode('ASCII', 'ignore')
-    data = u"{}".format(data).encode('utf-8')
+    data = "{}".format(data).encode('utf-8')
     try:
         req, content = http_client.request(
             url,

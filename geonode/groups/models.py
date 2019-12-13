@@ -44,7 +44,7 @@ class GroupCategory(models.Model):
     class Meta:
         verbose_name_plural = _('Group Categories')
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Category: {}'.format(self.name.encode('utf-8'))
 
     def get_absolute_url(self):
@@ -117,7 +117,7 @@ class GroupProfile(models.Model):
             return cls.objects.filter(groupmember__user=user)
         return []
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def keyword_list(self):

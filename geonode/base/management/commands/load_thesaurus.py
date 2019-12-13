@@ -124,7 +124,7 @@ class Command(BaseCommand):
                 lang = pref_label.attrib.get(LANG_ATTRIB)
                 label = pref_label.text
 
-                print(u'    Label {}: {}'.format(lang, label))
+                print('    Label {}: {}'.format(lang, label))
 
                 tkl = ThesaurusKeywordLabel()
                 tkl.keyword = tk

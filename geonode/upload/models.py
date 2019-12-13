@@ -131,7 +131,7 @@ class Upload(models.Model):
             if self.upload_dir and path.exists(self.upload_dir):
                 shutil.rmtree(self.upload_dir)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Upload [%s] gs%s - %s, %s' % (self.pk,
                                               self.import_id,
                                               self.name,
@@ -143,7 +143,7 @@ class UploadFile(models.Model):
     file = models.FileField(upload_to="uploads")
     slug = models.SlugField(max_length=50, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.slug
 
     @models.permalink

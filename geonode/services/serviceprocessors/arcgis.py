@@ -224,9 +224,9 @@ class ArcMapServiceHandler(base.ServiceHandlerBase):
             "storeType": "remoteStore",
             "workspace": "remoteWorkspace",
             "typename": slugify(
-                u"%s-%s" % (layer_meta.id, layer_meta.title.encode("ascii", "ignore"))),
+                "%s-%s" % (layer_meta.id, layer_meta.title.encode("ascii", "ignore"))),
             "alternate": slugify(
-                u"%s-%s" % (layer_meta.id, layer_meta.title.encode("ascii", "ignore"))),
+                "%s-%s" % (layer_meta.id, layer_meta.title.encode("ascii", "ignore"))),
             "title": layer_meta.title,
             "abstract": layer_meta.abstract,
             "bbox_x0": bbox[0],

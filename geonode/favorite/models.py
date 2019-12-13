@@ -103,7 +103,7 @@ class Favorite(models.Model):
         verbose_name_plural = 'favorites'
         unique_together = (('user', 'content_type', 'object_id'),)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.content_object:
             return "Favorite: {}, {}, {}".format(
                 self.content_object.title, self.content_type, self.user)

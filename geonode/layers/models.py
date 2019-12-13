@@ -80,8 +80,8 @@ class Style(models.Model, PermissionLevelMixin):
     sld_url = models.CharField(_('sld url'), null=True, max_length=1000)
     workspace = models.CharField(max_length=255, null=True, blank=True)
 
-    def __unicode__(self):
-        return u"%s" % self.name
+    def __str__(self):
+        return "%s" % self.name
 
     def __str__(self):
         return self.__unicode__().encode('utf-8')
@@ -273,8 +273,8 @@ class Layer(ResourceBase):
             }
         return cfg
 
-    def __unicode__(self):
-        return u"{0}".format(self.alternate)
+    def __str__(self):
+        return "{0}".format(self.alternate)
         # if self.alternate is not None:
         #     return "%s Layer" % self.service_typename.encode('utf-8')
         # elif self.name is not None:
@@ -342,13 +342,13 @@ class UploadSession(models.Model):
     def successful(self):
         return self.processed and self.errors is None
 
-    def __unicode__(self):
+    def __str__(self):
         _s = "[Upload session-id: {}]".format(self.id)
         try:
             _s += " - {}".format(self.resource.title)
         except BaseException:
             pass
-        return u"{0}".format(_s)
+        return "{0}".format(_s)
 
     def __str__(self):
         return self.__unicode__().encode('utf-8')
@@ -491,7 +491,7 @@ class Attribute(models.Model):
 
     objects = AttributeManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % self.attribute_label.encode(
             "utf-8", "replace") if self.attribute_label else self.attribute.encode("utf-8", "replace")
 
@@ -530,7 +530,7 @@ def pre_save_layer(instance, sender, **kwargs):
             logger.exception(e)
 
     if instance.abstract == '' or instance.abstract is None:
-        instance.abstract = u'No abstract provided'
+        instance.abstract = 'No abstract provided'
     if instance.title == '' or instance.title is None:
         instance.title = instance.name
 

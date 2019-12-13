@@ -134,7 +134,7 @@ class TreeWidget(TaggitWidget):
             '<span class="input-group-addon" id="treeview-toggle"><i class="fa fa-folder"></i></span>')
         output.append('</span></div>')
 
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
 
 class RegionsMultipleChoiceField(forms.MultipleChoiceField):
