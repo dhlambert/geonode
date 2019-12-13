@@ -34,7 +34,11 @@ except ImportError:
     from imp import reload
 
 reload(sys)
-sys.setdefaultencoding('utf-8')
+
+try:
+    sys.setdefaultencoding('utf-8')   # For Python 2
+except AttributeError:
+    pass   # Python 3 does not need to use / cannot use this function
 
 
 class ThumbnailTests(GeoNodeBaseTestSupport):
