@@ -68,8 +68,7 @@ class PermissionLevelMixin(object):
 
         resource = self.get_self_resource()
         users = get_users_with_perms(resource)
-        groups = get_groups_with_perms(resource,
-                                       attach_perms=True)
+        groups = get_groups_with_perms(resource, attach_perms=True)
         if groups:
             for group in groups:
                 try:

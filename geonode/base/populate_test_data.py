@@ -45,7 +45,7 @@ import six
 
 imgfile = BytesIO(
     b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00'
-    '\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
+    b'\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
 )
 f = SimpleUploadedFile('test_img_file.gif', imgfile.read(), 'image/gif')
 
@@ -162,7 +162,7 @@ def create_models(type=None):
     get_user_model().objects.get(username='AnonymousUser').groups.add(anonymous_group)
 
     obj_ids = []
-    if not type or type == 'map':
+    if not type or type == b'map' or type == 'map':
         for md, user in zip(map_data, cycle(users)):
             title, abstract, kws, (bbox_x0, bbox_x1, bbox_y0, bbox_y1), category = md
             m = Map(title=title,
@@ -185,7 +185,7 @@ def create_models(type=None):
             for kw in kws:
                 m.keywords.add(kw)
                 m.save()
-    if not type or type == 'document':
+    if not type or type == b'document' or type == 'document':
         for dd, user in zip(document_data, cycle(users)):
             title, abstract, kws, (bbox_x0, bbox_x1, bbox_y0, bbox_y1), category = dd
             m = Document(title=title,
@@ -205,7 +205,7 @@ def create_models(type=None):
                 m.keywords.add(kw)
                 m.save()
 
-    if not type or type == 'layer':
+    if not type or type == b'layer' or type == 'layer':
         for ld, owner, storeType in zip(layer_data, cycle(users), cycle(('coverageStore', 'dataStore'))):
             title, abstract, name, alternate, (bbox_x0, bbox_x1, bbox_y0, bbox_y1), start, kws, category = ld
             end = start + timedelta(days=365)
@@ -236,9 +236,9 @@ def create_models(type=None):
 
 def remove_models(obj_ids, type=None):
     if not type:
-        remove_models(None, type='map')
-        remove_models(None, type='layer')
-        remove_models(None, type='document')
+        remove_models(None, type=b'map')
+        remove_models(None, type=b'layer')
+        remove_models(None, type=b'document')
 
     if type == 'map':
         try:

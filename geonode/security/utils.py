@@ -497,30 +497,31 @@ def remove_object_permissions(instance):
 
     from guardian.models import UserObjectPermission, GroupObjectPermission
     resource = instance.get_self_resource()
-    print("resource..............//////////...........//////////.............")
-    # print(instance)
-    if hasattr(resource, "layer"):
-        try:
-            UserObjectPermission.objects.filter(
-                content_type=ContentType.objects.get_for_model(resource.layer),
-                object_pk=instance.id
-            ).delete()
-            GroupObjectPermission.objects.filter(
-                content_type=ContentType.objects.get_for_model(resource.layer),
-                object_pk=instance.id
-            ).delete()
-            if settings.OGC_SERVER['default']['GEOFENCE_SECURITY_ENABLED']:
-                purge_geofence_layer_rules(resource)
-        except (ObjectDoesNotExist, RuntimeError):
-            pass  # This layer is not manageable by geofence
-        except BaseException:
-            tb = traceback.format_exc()
-            logger.debug(tb)
-        finally:
-            if not getattr(settings, 'DELAYED_SECURITY_SIGNALS', False):
-                set_geofence_invalidate_cache()
-            else:
-                resource.set_dirty_state()
+    try:
+        if hasattr(resource, "layer"):
+            try:
+                UserObjectPermission.objects.filter(
+                    content_type=ContentType.objects.get_for_model(resource.layer),
+                    object_pk=instance.id
+                ).delete()
+                GroupObjectPermission.objects.filter(
+                    content_type=ContentType.objects.get_for_model(resource.layer),
+                    object_pk=instance.id
+                ).delete()
+                if settings.OGC_SERVER['default']['GEOFENCE_SECURITY_ENABLED']:
+                    purge_geofence_layer_rules(resource)
+            except (ObjectDoesNotExist, RuntimeError):
+                pass  # This layer is not manageable by geofence
+            except BaseException:
+                tb = traceback.format_exc()
+                logger.debug(tb)
+            finally:
+                if not getattr(settings, 'DELAYED_SECURITY_SIGNALS', False):
+                    set_geofence_invalidate_cache()
+                else:
+                    resource.set_dirty_state()
+    except ObjectDoesNotExist:
+        pass
 
     UserObjectPermission.objects.filter(content_type=ContentType.objects.get_for_model(resource),
                                         object_pk=instance.id).delete()

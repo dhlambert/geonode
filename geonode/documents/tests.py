@@ -86,7 +86,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
             doc_file=f,
             owner=superuser,
             title='theimg')
-        # c.set_default_permissions()
+        c.set_default_permissions()
         self.assertEqual(Document.objects.get(pk=c.id).title, 'theimg')
 
     def test_create_document_with_rel(self):
@@ -211,14 +211,14 @@ class DocumentsTest(GeoNodeBaseTestSupport):
     def test_document_details(self):
         """/documents/1 -> Test accessing the detail view of a document"""
         d = Document.objects.all().first()
-        # d.set_default_permissions()
+        d.set_default_permissions()
 
         response = self.client.get(reverse('document_detail', args=(str(d.id),)))
         self.assertEqual(response.status_code, 200)
 
     def test_document_metadata_details(self):
         d = Document.objects.all().first()
-        # d.set_default_permissions()
+        d.set_default_permissions()
 
         response = self.client.get(reverse('document_metadata_detail', args=(str(d.id),)))
         self.assertEqual(response.status_code, 200)
@@ -243,7 +243,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
         log = self.client.login(username='bobby', password='bob')
         self.assertTrue(log)
         response = self.client.get(reverse('document_upload'))
-        self.assertTrue('Upload Documents' in response.content)
+        self.assertTrue(b'Upload Documents' in response.content)
 
     def test_document_isuploaded(self):
         """/documents/upload -> Test uploading a document"""
@@ -309,7 +309,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
             doc_file=f,
             owner=superuser,
             title='theimg')
-        # document.set_default_permissions()
+        document.set_default_permissions()
         document_id = document.id
         invalid_document_id = 20
 
@@ -323,7 +323,7 @@ class DocumentsTest(GeoNodeBaseTestSupport):
 
         # Test that GET returns permissions
         response = self.client.get(reverse('resource_permissions', args=(document_id,)))
-        assert('permissions' in response.content)
+        assert(b'permissions' in response.content)
 
         # Test that a user is required to have
         # documents.change_layer_permissions
@@ -532,7 +532,7 @@ class DocumentNotificationsTestCase(NotificationsTestsHelper):
     def setUp(self):
         self.user = 'admin'
         self.passwd = 'admin'
-        create_models(type='document')
+        create_models(type=b'document')
         self.anonymous_user = get_anonymous_user()
         self.u = get_user_model().objects.get(username=self.user)
         self.u.email = 'test@email.com'
@@ -562,9 +562,9 @@ class DocumentNotificationsTestCase(NotificationsTestsHelper):
 class DocumentResourceLinkTestCase(GeoNodeBaseTestSupport):
 
     def setUp(self):
-        create_models('document')
-        create_models('map')
-        create_models('layer')
+        create_models(b'document')
+        create_models(b'map')
+        create_models(b'layer')
 
         self.test_file = io.BytesIO(
             b'GIF87a\x01\x00\x01\x00\x80\x01\x00\x00\x00\x00ccc,\x00'
@@ -575,8 +575,8 @@ class DocumentResourceLinkTestCase(GeoNodeBaseTestSupport):
         """Tests the creation of document links."""
         f = SimpleUploadedFile(
             'test_img_file.gif',
-            self.test_file,
-            b'image/gif'
+            self.test_file.read(),
+            'image/gif'
         )
 
         superuser = get_user_model().objects.get(pk=2)

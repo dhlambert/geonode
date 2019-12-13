@@ -134,7 +134,7 @@ def document_detail(request, docid):
             'perms_list': get_perms(
                 request.user,
                 document.get_self_resource()) + get_perms(request.user, document),
-            # 'permissions_json': _perms_info_json(document),
+            'permissions_json': _perms_info_json(document),
             'resource': document,
             'group': group,
             'metadata': metadata,
