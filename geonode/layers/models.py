@@ -81,10 +81,7 @@ class Style(models.Model, PermissionLevelMixin):
     workspace = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return "%s" % self.name
-
-    def __str__(self):
-        return self.__unicode__().encode('utf-8')
+        return self.name
 
     def absolute_url(self):
         if self.sld_url:
@@ -274,16 +271,7 @@ class Layer(ResourceBase):
         return cfg
 
     def __str__(self):
-        return "{0}".format(self.alternate)
-        # if self.alternate is not None:
-        #     return "%s Layer" % self.service_typename.encode('utf-8')
-        # elif self.name is not None:
-        #     return "%s Layer" % self.name
-        # else:
-        #     return "Unamed Layer"
-
-    def __str__(self):
-        return self.__unicode__().encode('utf-8')
+        return str(self.alternate)
 
     class Meta:
         # custom permissions,
@@ -348,11 +336,7 @@ class UploadSession(models.Model):
             _s += " - {}".format(self.resource.title)
         except BaseException:
             pass
-        return "{0}".format(_s)
-
-    def __str__(self):
-        return self.__unicode__().encode('utf-8')
-
+        return _s
 
 class LayerFile(models.Model):
 
