@@ -168,7 +168,6 @@ class Map(ResourceBase, GXPMapBase):
         """
 
         template_name = hookset.update_from_viewer(conf, context=context)
-        conf = json.loads(context['config'])
 
         self.title = conf['title'] if 'title' in conf else conf['about']['title']
         self.abstract = conf['abstract'] if 'abstract' in conf else conf['about']['abstract']
