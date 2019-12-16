@@ -1129,15 +1129,7 @@ def fixup_shp_columnnames(inShapefile, charset, tempdir=None):
         field_name = inLayerDefn.GetFieldDefn(i).GetName()
         if not a.match(field_name):
             # once the field_name contains Chinese, to use slugify_zh
-            has_ch = False
-            for ch in field_name:
-                try:
-                    if '\\u4e00' <= ch.decode("utf-8", "replace") <= '\\u9fff':
-                        has_ch = True
-                        break
-                except UnicodeDecodeError:
-                    has_ch = True
-                    break
+            has_ch = any('\u4e00' <= ch <= '\u9fff' for ch in field_name)
             if has_ch:
                 new_field_name = slugify_zh(field_name, separator='_')
             else:
@@ -1412,7 +1404,7 @@ class HttpClient(object):
                     pass
             elif user == self.username:
                 valid_uname_pw = base64.b64encode(
-                    b"%s:%s" % (self.username, self.password)).decode("ascii")
+                    "{}:{}".format(self.username, self.password).encode()).decode()
                 headers['Authorization'] = 'Basic {}'.format(valid_uname_pw)
 
         response = None

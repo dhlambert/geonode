@@ -562,7 +562,7 @@ class GeoNodeServiceHandler(WmsServiceHandler):
                                     geonode_layer.remote_service.service_url, _url.path)
                             resp, image = http_client.request(
                                 thumbnail_remote_url)
-                            if 'ServiceException' in image or \
+                            if b'ServiceException' in image or \
                                resp.status_code < 200 or resp.status_code > 299:
                                 msg = 'Unable to obtain thumbnail: %s' % image
                                 logger.debug(msg)

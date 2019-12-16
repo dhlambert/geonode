@@ -1183,7 +1183,7 @@ class GeoNodePermissionsTest(GeoNodeLiveTestSupport):
             get_capabilities_url = 'ows?' \
                 'service=wms&version=1.3.0&request=GetCapabilities'
             url = urljoin(geoserver_base_url, get_capabilities_url)
-            str_to_check = '<Name>geonode:san_andres_y_providencia_highway</Name>'
+            str_to_check = b'<Name>geonode:san_andres_y_providencia_highway</Name>'
             request = Request(url)
             response = urlopen(request)
 
