@@ -18,6 +18,7 @@
 #
 #########################################################################
 
+import os.path
 import io
 import subprocess
 import traceback
@@ -102,22 +103,26 @@ def generate_thumbnail_content(image_path, size=(200, 150)):
     """
 
     try:
-        from PIL import Image, ImageOps
+        from PIL import Image, ImageOps, ImageFile
+
+        Image.MAX_IMAGE_PIXELS = None
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
     except ImportError:
         raise MissingPILError()
 
-    try:
-        image = Image.open(image_path)
-        source_width, source_height = image.size
-        target_width, target_height = size
-
-        if source_width != target_width or source_width != target_height:
-            image = ImageOps.fit(image, size, Image.ANTIALIAS)
-
-        output = io.BytesIO()
-        image.save(output, format='PNG')
-        content = output.getvalue()
-        output.close()
-        return content
-    except BaseException:
+    if not os.path.exists(image_path):
         return None
+
+    image = Image.open(image_path)
+    source_width, source_height = image.size
+    target_width, target_height = size
+
+    if source_width != target_width or source_width != target_height:
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+
+    output = io.BytesIO()
+    image.save(output, format='PNG')
+    content = output.getvalue()
+    output.close()
+
+    return content
