@@ -699,35 +699,39 @@ class BulkPermissionsTests(ResourceTestCaseMixin, GeoNodeBaseTestSupport):
                 '-81.370560451855,13.372728455566' \
                 '&WIDTH=217&HEIGHT=512'
 
+            user_auth = base64.b64encode(b"bobby:bob").decode()
+            headers = {
+                "Authorization": "Basic {}".format(user_auth)
+            }
+
             # test view_resourcebase permission on anonymous user
             request = Request(url)
             response = urlopen(request)
-            self.assertTrue(
-                response.info().getheader('Content-Type'),
-                'application/vnd.ogc.se_xml;charset=UTF-8'
+            self.assertEqual(
+                response.getheader('Content-Type'),
+                "application/vnd.ogc.se_xml;charset=utf-8"
             )
 
             # test WMS with authenticated user that has not view_resourcebase:
             # the layer must be not accessible (response is xml)
-            request = Request(url)
-            base64string = base64.encodestring(
-                '%s:%s' % ('bobby', 'bob')).replace('\n', '')
-            request.add_header("Authorization", "Basic %s" % base64string)
+            request = Request(url, headers=headers)
             response = urlopen(request)
-            self.assertTrue(
-                response.info().getheader('Content-Type'),
-                'application/vnd.ogc.se_xml;charset=UTF-8'
+            self.assertEqual(
+                response.getheader('Content-Type'),
+                "application/vnd.ogc.se_xml;charset=utf-8"
             )
 
             # test WMS with authenticated user that has view_resourcebase: the layer
             # must be accessible (response is image)
             assign_perm('view_resourcebase', bobby, layer.get_self_resource())
-            request = Request(url)
-            base64string = base64.encodestring(
-                '%s:%s' % ('bobby', 'bob')).replace('\n', '')
-            request.add_header("Authorization", "Basic %s" % base64string)
+            self.assertTrue(bobby.has_perm("view_resourcebase", layer.get_self_resource()))
+
+            request = Request(url, headers=headers)
             response = urlopen(request)
-            self.assertTrue(response.info().getheader('Content-Type'), 'image/png')
+            self.assertEqual(
+                response.getheader('Content-Type'),
+                "image/png"
+            )
 
             # test change_layer_data
             # would be nice to make a WFS/T request and test results, but this
@@ -936,7 +940,7 @@ class PermissionsTest(GeoNodeBaseTestSupport):
                 args=(
                     valid_layer_typename,
                 )))
-        assert('permissions' in response.content)
+        assert(b'permissions' in response.content)
 
         # Test that a user is required to have maps.change_layer_permissions
 
