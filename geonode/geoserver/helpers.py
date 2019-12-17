@@ -658,7 +658,7 @@ def gs_slurp(
                 # "workspace": workspace.name,
                 "store": the_store.name,
                 "storeType": the_store.resource_type,
-                "alternate": "%s:%s" % (workspace.name.encode('utf-8'), resource.name.encode('utf-8')),
+                "alternate": "%s:%s" % (workspace.name, resource.name),
                 "title": resource.title or 'No title provided',
                 "abstract": resource.abstract or "{}".format(_('No abstract provided')).encode('utf-8'),
                 "owner": owner,
