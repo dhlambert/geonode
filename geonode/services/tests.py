@@ -600,25 +600,25 @@ class WmsServiceHarvestingTestCase(StaticLiveServerTestCase):
     selenium = None
 
     @classmethod
-    def setUpClass(cls):
-        super(WmsServiceHarvestingTestCase, cls).setUpClass()
+    def setUpClass(self):
+        super(WmsServiceHarvestingTestCase, self).setUpClass()
 
         try:
-            cls.client = Client()
+            self.client = Client()
             UserModel = get_user_model()
-            cls.user = UserModel.objects.create_user(username='test', password='test@123', first_name='ather',
+            self.user = UserModel.objects.create_user(username='test', password='test@123', first_name='ather',
                                                      last_name='ashraf', is_staff=True,
                                                      is_active=True, is_superuser=False)
-            cls.user.save()
-            cls.client.login(username='test', password='test@123')
-            cls.cookie = cls.client.cookies['sessionid']
-            cls.selenium = webdriver.Firefox()
-            cls.selenium.implicitly_wait(10)
-            cls.selenium.get(cls.live_server_url + '/')
-            cls.selenium.add_cookie({'name': 'sessionid', 'value': cls.cookie.value, 'secure': False, 'path': '/'})
-            cls.selenium.refresh()
+            self.user.save()
+            self.client.login(username='test', password='test@123')
+            self.cookie = self.client.cookies['sessionid']
+            self.selenium = webdriver.Firefox()
+            self.selenium.implicitly_wait(10)
+            self.selenium.get(self.live_server_url + '/')
+            self.selenium.add_cookie({'name': 'sessionid', 'value': self.cookie.value, 'secure': False, 'path': '/'})
+            self.selenium.refresh()
             reg_url = reverse('register_service')
-            cls.client.get(reg_url)
+            self.client.get(reg_url)
 
             url = 'https://demo.geo-solutions.it/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities'
             service_type = enumerations.WMS
@@ -628,18 +628,18 @@ class WmsServiceHarvestingTestCase(StaticLiveServerTestCase):
             }
             forms.CreateServiceForm(form_data)
 
-            response = cls.client.post(reverse('register_service'), data=form_data)
-            cls.selenium.get(cls.live_server_url + response.url)
-            cls.selenium.refresh()
+            response = self.client.post(reverse('register_service'), data=form_data)
+            self.selenium.get(self.live_server_url + response.url)
+            self.selenium.refresh()
         except Exception as e:
             msg = str(e)
             print(msg)
 
     @classmethod
-    def tearDownClass(cls):
-        if cls.selenium:
-            cls.selenium.quit()
-            super(WmsServiceHarvestingTestCase, cls).tearDownClass()
+    def tearDownClass(self):
+        if self.selenium:
+            self.selenium.quit()
+            super(WmsServiceHarvestingTestCase, self).tearDownClass()
 
     def test_harvest_resources(self):
         if self.selenium:
