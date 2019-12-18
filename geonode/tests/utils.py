@@ -20,6 +20,7 @@
 
 from geonode.tests.base import GeoNodeBaseTestSupport
 
+import io
 import os
 import copy
 import base64
@@ -117,7 +118,7 @@ class Client(DjangoTestClient):
 
         if data:
             for name, value in data.items():
-                if isinstance(value, file):
+                if isinstance(value, io.IOBase):
                     data[name] = (os.path.basename(value.name), value)
 
             encoder = MultipartEncoder(fields=data)
@@ -129,11 +130,12 @@ class Client(DjangoTestClient):
         try:
             response.raise_for_status()
         except requests.HTTPError as ex:
+            msg = str(ex)
+            msg = msg[msg.index(':')+2:]
             if debug:
                 logger.error('error in request to %s' % path)
-                logger.error(ex.message)
-            message = ex.message[ex.message.index(':')+2:]
-            raise HTTPError(url, response.status_code, message, response.headers, None)
+                logger.error(msg)
+            raise HTTPError(url, response.status_code, msg, response.headers, None)
 
         return response
 
