@@ -21,6 +21,7 @@ import logging
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -137,14 +138,17 @@ class GroupProfile(models.Model):
             self.group, [
                 'base.view_resourcebase', 'base.change_resourcebase'], any_perm=True)
 
-        if resource_type:
-            queryset = [
-                item for item in queryset if hasattr(
-                    item,
-                    resource_type)]
+        if isinstance(resource_type, str):
+            resources = []
+            for item in queryset:
+                try:
+                    if hasattr(item, resource_type):
+                        resources.append(item)
+                except ObjectDoesNotExist:
+                    pass
+            return resources
 
-        for resource in queryset:
-            yield resource
+        return [resource for resource in queryset]
 
     def member_queryset(self):
         return self.groupmember_set.all()

@@ -111,9 +111,12 @@ class PermissionLevelMixin(object):
         return info
 
     def get_self_resource(self):
-        return self.resourcebase_ptr if hasattr(
-            self,
-            'resourcebase_ptr_id') else self
+        try:
+            if hasattr(self, "resourcebase_ptr_id"):
+                return self.resourcebase_ptr
+        except ObjectDoesNotExist:
+            pass
+        return self
 
     def set_default_permissions(self):
         """
