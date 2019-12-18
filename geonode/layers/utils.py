@@ -526,18 +526,14 @@ def file_upload(filename,
                     if not lyr:
                         raise Exception(
                             _("You are attempting to replace a vector layer with an incompatible source."))
-                    limit = 1
                     schema_is_compliant = False
-                    for feat in islice(lyr, 0, limit):
-                        _ff = json.loads(feat.ExportToJson())
-                        if not gtype:
-                            raise Exception(
-                                _("Local GeoNode layer has no geometry type."))
-                        if _ff["geometry"]["type"] in gtype or \
-                        gtype in _ff["geometry"]["type"]:
-                            schema_is_compliant = True
-                            break
-                    if not schema_is_compliant:
+                    _ff = json.loads(lyr.GetFeature(0).ExportToJson())
+                    if not gtype:
+                        raise Exception(
+                            _("Local GeoNode layer has no geometry type."))
+                    if _ff["geometry"]["type"] in gtype or gtype in _ff["geometry"]["type"]:
+                        schema_is_compliant = True
+                    elif not schema_is_compliant:
                         raise Exception(
                             _("You are attempting to replace a vector layer with an incompatible schema."))
                 except BaseException as e:
