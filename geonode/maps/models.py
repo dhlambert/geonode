@@ -90,8 +90,10 @@ class Map(ResourceBase, GXPMapBase):
     # Full URL for featured map view, ie http://domain/someview
 
     def __str__(self):
-        return '%s by %s' % (
-            self.title, (self.owner.username if self.owner else "<Anonymous>"))
+        return "{} by {}".format(
+            self.title,
+            self.owner.username if self.owner else "<Anonymous>"
+        )
 
     @property
     def center(self):
@@ -553,7 +555,7 @@ class MapLayer(models.Model, GXPLayerBase):
         ordering = ["stack_order"]
 
     def __str__(self):
-        return '%s?layers=%s' % (self.ows_url, self.name)
+        return "{}?layers={}".format(self.ows_url, self.name)
 
 
 def pre_delete_map(instance, sender, **kwrargs):

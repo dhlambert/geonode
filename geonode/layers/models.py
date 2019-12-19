@@ -81,7 +81,7 @@ class Style(models.Model, PermissionLevelMixin):
     workspace = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def absolute_url(self):
         if self.sld_url:
@@ -334,7 +334,7 @@ class UploadSession(models.Model):
         _s = "[Upload session-id: {}]".format(self.id)
         try:
             _s += " - {}".format(self.resource.title)
-        except BaseException:
+        except AttributeError:
             pass
         return _s
 
@@ -476,8 +476,7 @@ class Attribute(models.Model):
     objects = AttributeManager()
 
     def __str__(self):
-        return "%s" % self.attribute_label.encode(
-            "utf-8", "replace") if self.attribute_label else self.attribute.encode("utf-8", "replace")
+        return self.attribute_label
 
     def unique_values_as_list(self):
         return self.unique_values.split(',')

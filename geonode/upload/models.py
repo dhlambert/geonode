@@ -132,10 +132,12 @@ class Upload(models.Model):
                 shutil.rmtree(self.upload_dir)
 
     def __str__(self):
-        return 'Upload [%s] gs%s - %s, %s' % (self.pk,
-                                              self.import_id,
-                                              self.name,
-                                              self.user)
+        return "Upload [{}] gs{} - {}, {}".format(
+            self.pk,
+            self.import_id,
+            self.name,
+            self.user
+        )
 
 
 class UploadFile(models.Model):
@@ -144,7 +146,7 @@ class UploadFile(models.Model):
     slug = models.SlugField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.slug
+        return str(self.slug)
 
     @models.permalink
     def get_absolute_url(self):

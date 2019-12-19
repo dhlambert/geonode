@@ -140,7 +140,7 @@ class TopicCategory(models.Model):
     fa_class = models.CharField(max_length=64, default='fa-times')
 
     def __str__(self):
-        return "{}".format(self.gn_description)
+        return str(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -160,7 +160,7 @@ class SpatialRepresentationType(models.Model):
     is_choice = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{}".format(self.gn_description)
+        return str(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -213,7 +213,7 @@ class Region(MPTTModel):
         default='EPSG:4326')
 
     def __str__(self):
-        return "{}".format(self.name)
+        return str(self.name)
 
     @property
     def bbox(self):
@@ -262,7 +262,7 @@ class RestrictionCodeType(models.Model):
     is_choice = models.BooleanField(default=True)
 
     def __str__(self):
-        return "{}".format(self.gn_description)
+        return str(self.gn_description)
 
     class Meta:
         ordering = ("identifier",)
@@ -291,7 +291,7 @@ class License(models.Model):
     license_text = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return "{}".format(self.name)
+        return str(self.name)
 
     @property
     def name_long(self):
@@ -426,7 +426,7 @@ class Thesaurus(models.Model):
     slug = models.CharField(max_length=64, default='')
 
     def __str__(self):
-        return "{}".format(self.identifier)
+        return str(self.identifier)
 
     class Meta:
         ordering = ("identifier",)
@@ -447,7 +447,7 @@ class ThesaurusKeywordLabel(models.Model):
     keyword = models.ForeignKey('ThesaurusKeyword', related_name='keyword')
 
     def __str__(self):
-        return "{}".format(self.label)
+        return str(self.label)
 
     class Meta:
         ordering = ("keyword", "lang")
@@ -471,7 +471,7 @@ class ThesaurusKeyword(models.Model):
     thesaurus = models.ForeignKey('Thesaurus', related_name='thesaurus')
 
     def __str__(self):
-        return "{}".format(self.alt_label)
+        return str(self.alt_label)
 
     @property
     def labels(self):
@@ -776,7 +776,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.title)
+        return str(self.title)
 
     # fields controlling security state
     dirty_state = models.BooleanField(
@@ -1402,10 +1402,7 @@ class MenuPlaceholder(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.name)
-
-    def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class Menu(models.Model):
@@ -1425,10 +1422,7 @@ class Menu(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.title)
-
-    def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         unique_together = (
@@ -1461,10 +1455,7 @@ class MenuItem(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.title)
-
-    def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         unique_together = (

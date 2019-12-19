@@ -45,7 +45,7 @@ class Partner(models.Model):
         return "{0}".format(_href)
 
     def __str__(self):
-        return "{0}".format(self.title)
+        return str(self.title)
 
     class Meta:
         ordering = ("name", )
@@ -192,7 +192,7 @@ class GeoNodeThemeCustomization(models.Model):
         return "{0}".format(self.identifier)
 
     def __str__(self):
-        return "{0}".format(self.name)
+        return str(self.name)
 
     class Meta:
         ordering = ("date", )

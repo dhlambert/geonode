@@ -71,9 +71,6 @@ class Document(ResourceBase):
         help_text=_('The URL of the document if it is external.'),
         verbose_name=_('URL'))
 
-    def __str__(self):
-        return self.title
-
     def get_absolute_url(self):
         return reverse('document_detail', args=(self.id,))
 

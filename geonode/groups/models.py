@@ -46,7 +46,7 @@ class GroupCategory(models.Model):
         verbose_name_plural = _('Group Categories')
 
     def __str__(self):
-        return 'Category: {}'.format(self.name.encode('utf-8'))
+        return 'Category: {}'.format(self.name)
 
     def get_absolute_url(self):
         return reverse('group_category_detail', args=(self.slug,))
@@ -119,7 +119,7 @@ class GroupProfile(models.Model):
         return []
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     def keyword_list(self):
         """

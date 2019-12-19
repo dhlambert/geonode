@@ -901,7 +901,7 @@ class MetricLabel(models.Model):
         blank=True)
 
     def __str__(self):
-        return 'Metric Label: {}'.format(self.name.encode('ascii', 'ignore'))
+        return "Metric Label: {}" + ''.join(c for c in self.name if ord(c) < 128)
 
 
 class MetricValue(models.Model):
@@ -946,16 +946,20 @@ class MetricValue(models.Model):
     def __str__(self):
         metric = self.service_metric.metric.name
         if self.label:
-            _l = self.label.name
-            if isinstance(_l, text_type):
-                _l = _l.encode('utf-8')
-            metric = '{} [{}]'.format(metric, _l)
-        if self.resource and self.resource.type:
-            metric = '{} for {}'.format(
-                metric, '{}={}'.format(
-                    self.resource.type, self.resource.name))
-        return 'Metric Value: {}: [{}] (since {} until {})'.format(
-            metric, self.value, self.valid_from, self.valid_to)
+            metric = "{} [{}]".format(metric, self.label.name)
+        elif self.resource and self.resource.type:
+            metric = "{} for {}={}".format(
+                metric,
+                self.resource.type,
+                self.resource.name
+            )
+
+        return "Metric Value: {}: [{}] (since {} until {})".format(
+            metric,
+            self.value,
+            self.valid_from,
+            self.valid_to
+        )
 
     @classmethod
     def add(cls, metric, valid_from, valid_to, service, label,
@@ -1601,10 +1605,12 @@ class MetricNotificationCheck(models.Model):
             self.valid_from, self.valid_to = metric.valid_from, metric.valid_to
 
         def __str__(self):
-            return "MetricValueError({}: metric {} misses {} check: {})".format(self.severity,
-                                                                                self.metric,
-                                                                                self.check,
-                                                                                self.message)
+            return "MetricValueError({}: metric {} misses {} check: {})".format(
+                self.severity,
+                self.metric,
+                self.check,
+                self.messag
+            )
 
     def check_value(self, metric, valid_on):
         """

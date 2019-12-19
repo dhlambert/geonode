@@ -152,9 +152,6 @@ class Service(ResourceBase):
 
     # Supported Capabilities
 
-    def __str__(self):
-        return self.name
-
     @property
     def service_url(self):
         service_url = self.base_url if not self.proxy_base else urljoin(
