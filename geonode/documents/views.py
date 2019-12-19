@@ -390,9 +390,8 @@ def document_metadata(
             lang = 'en'  # TODO: use user's language
             if doc_tkeywords and len(doc_tkeywords) > 0:
                 tkeywords_ids = doc_tkeywords.values_list('id', flat=True)
-                if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-                    el = settings.THESAURUS
-                    thesaurus_name = el['name']
+                thesaurus_name = getattr(settings, 'THESAURUS', {}).get('name')
+                if thesaurus_name:
                     try:
                         t = Thesaurus.objects.get(identifier=thesaurus_name)
                         for tk in t.thesaurus.filter(pk__in=tkeywords_ids):
@@ -498,9 +497,8 @@ def document_metadata(
                         except BaseException:
                             pass
 
-                    if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-                        el = settings.THESAURUS
-                        thesaurus_name = el['name']
+                    thesaurus_name = getattr(settings, 'THESAURUS', {}).get('name')
+                    if thesaurus_name:
                         try:
                             t = Thesaurus.objects.get(
                                 identifier=thesaurus_name)

@@ -25,9 +25,8 @@ from autocomplete_light.widgets import MultipleChoiceWidget
 class MultiThesaurusWidget(MultipleChoiceWidget):
 
     def __init__(self, attrs=None):
-        if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-            el = settings.THESAURUS
-            widget_name = el['name']
+        widget_name = getattr(settings, 'THESAURUS', {}).get('name')
+        if widget_name:
             cleaned_name = el['name'].replace("-", " ").replace("_", " ").title()
             super(MultiThesaurusWidget, self).__init__(
                 'thesaurus_' + widget_name,

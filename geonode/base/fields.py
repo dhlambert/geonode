@@ -39,10 +39,9 @@ class MultiThesauriField(forms.MultiValueField):
         super(MultiThesauriField, self).__init__(*args, **kwargs)
         self.require_all_fields = kwargs.pop('require_all_fields', True)
 
-        if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-            el = settings.THESAURUS
+        thesaurus_name = getattr(settings, 'THESAURUS', {}).get('name')
+        if thesaurus_name:
             choices_list = []
-            thesaurus_name = el['name']
             try:
                 t = Thesaurus.objects.get(identifier=thesaurus_name)
                 for tk in t.thesaurus.all():

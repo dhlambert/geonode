@@ -940,9 +940,8 @@ def layer_metadata(
         lang = 'en'  # TODO: use user's language
         if layer_tkeywords and len(layer_tkeywords) > 0:
             tkeywords_ids = layer_tkeywords.values_list('id', flat=True)
-            if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-                el = settings.THESAURUS
-                thesaurus_name = el['name']
+            thesaurus_name = getattr(settings, 'THESAURUS', {}).get('name')
+            if thesaurus_name:
                 try:
                     t = Thesaurus.objects.get(identifier=thesaurus_name)
                     for tk in t.thesaurus.filter(pk__in=tkeywords_ids):
@@ -1063,9 +1062,8 @@ def layer_metadata(
                     except BaseException:
                         pass
 
-                if hasattr(settings, 'THESAURUS') and settings.THESAURUS:
-                    el = settings.THESAURUS
-                    thesaurus_name = el['name']
+                thesaurus_name = getattr(settings, 'THESAURUS', {}).get('name')
+                if thesaurus_name:
                     try:
                         t = Thesaurus.objects.get(
                             identifier=thesaurus_name)
