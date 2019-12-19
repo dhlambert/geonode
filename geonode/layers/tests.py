@@ -324,7 +324,7 @@ class LayersTest(GeoNodeBaseTestSupport):
         if check_ogc_backend(geoserver.BACKEND_PACKAGE):
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="metadata")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 7)
+            self.assertEqual(links.count(), 7)
             for ll in links:
                 self.assertEqual(ll.link_type, "metadata")
 
@@ -333,30 +333,30 @@ class LayersTest(GeoNodeBaseTestSupport):
             Link.objects.filter(resource=lyr.resourcebase_ptr, link_type__in=_def_link_types).delete()
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="data")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 0)
+            self.assertEqual(links.count(), 0)
 
             set_resource_default_links(lyr, lyr)
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="metadata")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 7)
+            self.assertEqual(links.count(), 7)
             for ll in links:
                 self.assertEqual(ll.link_type, "metadata")
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="data")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 6)
+            self.assertEqual(links.count(), 6)
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="image")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 5)
+            self.assertEqual(links.count(), 5)
 
         lyr = Layer.objects.filter(storeType="coverageStore").first()
         self.assertEqual(lyr.storeType, "coverageStore")
         if check_ogc_backend(geoserver.BACKEND_PACKAGE):
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="metadata")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 7)
+            self.assertEqual(links.count(), 7)
             for ll in links:
                 self.assertEqual(ll.link_type, "metadata")
 
@@ -365,23 +365,23 @@ class LayersTest(GeoNodeBaseTestSupport):
             Link.objects.filter(resource=lyr.resourcebase_ptr, link_type__in=_def_link_types).delete()
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="data")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 0)
+            self.assertEqual(links.count(), 0)
 
             set_resource_default_links(lyr, lyr)
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="metadata")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 7)
+            self.assertEqual(links.count(), 7)
             for ll in links:
                 self.assertEqual(ll.link_type, "metadata")
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="data")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 2)
+            self.assertEqual(links.count(), 2)
 
             links = Link.objects.filter(resource=lyr.resourcebase_ptr, link_type="image")
             self.assertIsNotNone(links)
-            self.assertEqual(len(links), 9)
+            self.assertEqual(links.count(), 9)
 
     def test_get_valid_user(self):
         # Verify it accepts an admin user
