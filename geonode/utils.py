@@ -242,7 +242,7 @@ def _get_basic_auth_info(request):
     meth, auth = request.META['HTTP_AUTHORIZATION'].split()
     if meth.lower() != 'basic':
         raise ValueError
-    username, password = base64.b64decode(auth).split(':')
+    username, password = base64.b64decode(auth.encode()).decode().split(':')
     return username, password
 
 

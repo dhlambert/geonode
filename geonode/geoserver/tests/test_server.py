@@ -592,7 +592,7 @@ class LayerTests(GeoNodeBaseTestSupport):
                       "line.sld",):
                 path = os.path.join(d, f)
                 f = open(path, "wb")
-                f.write(SLDS[splitext(basename(path))[0]])
+                f.write(SLDS[basename(path).split('.')[0]].encode())
                 f.close()
 
             # Test 'san_andres_y_providencia.sld'
@@ -752,12 +752,12 @@ class LayerTests(GeoNodeBaseTestSupport):
         invalid_uname_pw = '%s:%s' % ('n0t', 'v@l1d')
 
         valid_auth_headers = {
-            'HTTP_AUTHORIZATION': 'basic ' + base64.b64encode(valid_uname_pw),
+            'HTTP_AUTHORIZATION': 'basic ' + base64.b64encode(valid_uname_pw.encode()).decode(),
         }
 
         invalid_auth_headers = {
             'HTTP_AUTHORIZATION': 'basic ' +
-            base64.b64encode(invalid_uname_pw),
+            base64.b64encode(invalid_uname_pw.encode()).decode(),
         }
 
         bob = get_user_model().objects.get(username='bobby')
@@ -816,12 +816,12 @@ class LayerTests(GeoNodeBaseTestSupport):
         invalid_uname_pw = "%s:%s" % ("n0t", "v@l1d")
 
         valid_auth_headers = {
-            'HTTP_AUTHORIZATION': 'basic ' + base64.b64encode(valid_uname_pw),
+            'HTTP_AUTHORIZATION': 'basic ' + base64.b64encode(valid_uname_pw.encode()).decode(),
         }
 
         invalid_auth_headers = {
             'HTTP_AUTHORIZATION': 'basic ' +
-            base64.b64encode(invalid_uname_pw),
+            base64.b64encode(invalid_uname_pw.encode()).decode(),
         }
 
         response = self.client.get(
@@ -937,7 +937,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         self.assertIsNone(ogc_settings.SFDSDFDSF)
 
         # Testing OWS endpoints
-        from urlparse import urljoin
+        from urllib.parse import urljoin
         from django.core.urlresolvers import reverse
         from ..ows import _wcs_get_capabilities, _wfs_get_capabilities, _wms_get_capabilities
         wcs = _wcs_get_capabilities()
@@ -949,7 +949,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         except BaseException:
             wcs_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'ows')
         self.assertEquals(wcs,
-                          '%s?version=2.0.1&request=GetCapabilities&service=WCS' % wcs_url)
+                          '%s?service=WCS&request=GetCapabilities&version=2.0.1' % wcs_url)
 
         wfs = _wfs_get_capabilities()
         logger.debug(wfs)
@@ -960,7 +960,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         except BaseException:
             wfs_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'ows')
         self.assertEquals(wfs,
-                          '%s?version=1.1.0&request=GetCapabilities&service=WFS' % wfs_url)
+                          '%s?service=WFS&request=GetCapabilities&version=1.1.0' % wfs_url)
 
         wms = _wms_get_capabilities()
         logger.debug(wms)
@@ -971,7 +971,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         except BaseException:
             wms_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'ows')
         self.assertEquals(wms,
-                          '%s?version=1.3.0&request=GetCapabilities&service=WMS' % wms_url)
+                          '%s?service=WMS&request=GetCapabilities&version=1.3.0' % wms_url)
 
         # Test OWS Download Links
         import urllib
@@ -1009,7 +1009,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         self.assertIsNotNone(wms_links)
         self.assertEquals(len(wms_links), 3)
         wms_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'wms')
-        identifier = urllib.urlencode({'layers': instance.alternate.encode('utf-8')})
+        identifier = urllib.parse.urlencode({'layers': instance.alternate.encode('utf-8')})
         for _link in wms_links:
             logger.debug('%s --> %s' % (wms_url, _link[3]))
             self.assertTrue(wms_url in _link[3])
@@ -1024,7 +1024,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         self.assertIsNotNone(wfs_links)
         self.assertEquals(len(wfs_links), 6)
         wfs_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'wfs')
-        identifier = urllib.urlencode({'typename': instance.alternate.encode('utf-8')})
+        identifier = urllib.parse.urlencode({'typename': instance.alternate.encode('utf-8')})
         for _link in wfs_links:
             logger.debug('%s --> %s' % (wfs_url, _link[3]))
             self.assertTrue(wfs_url in _link[3])
@@ -1039,7 +1039,7 @@ class UtilsTests(GeoNodeBaseTestSupport):
         self.assertIsNotNone(wcs_links)
         self.assertEquals(len(wcs_links), 2)
         wcs_url = urljoin(ogc_settings.PUBLIC_LOCATION, 'wcs')
-        identifier = urllib.urlencode({'coverageid': instance.alternate.encode('utf-8')})
+        identifier = urllib.parse.urlencode({'coverageid': instance.alternate.encode('utf-8')})
         for _link in wcs_links:
             logger.debug('%s --> %s' % (wcs_url, _link[3]))
             self.assertTrue(wcs_url in _link[3])

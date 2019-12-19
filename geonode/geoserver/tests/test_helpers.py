@@ -76,8 +76,8 @@ class HelperTest(GeoNodeBaseTestSupport):
         logger.info("Attempting to replace a layer with no geometry type.")
         with self.\
         assertRaisesRegexp(Exception, "Local GeoNode layer has no geometry type."):
-            replaced = file_upload(filename, layer=vector_layer, overwrite=True)
-
+            replaced = file_upload(filename, layer=vector_layer, overwrite=True)    
+            
         logger.info("Attempting to replace a vector layer.")
         replaced = file_upload(filename, layer=vector_layer, overwrite=True, gtype='LineString')
         self.assertIsNotNone(replaced)

@@ -520,7 +520,7 @@ def file_upload(filename,
                     _("You are attempting to replace a vector layer with an unknown format."))
             else:
                 try:
-                    gtype = layer.gtype if not gtype else gtype
+                    # gtype = layer.gtype if not gtype else gtype
                     inDataSource = ogr.Open(absolute_base_file)
                     lyr = inDataSource.GetLayer(str(layer.name))
                     if not lyr:
