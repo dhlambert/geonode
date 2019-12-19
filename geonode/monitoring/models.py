@@ -1633,8 +1633,7 @@ class MetricNotificationCheck(models.Model):
                     self.resource.type))
 
         msg_prefix = ' '.join(msg_prefix)
-        description_tmpl = ("{} {} should be {{}} "
-                            "{{:0.0f}}{}, got {{:0.0f}}{} instead").format(msg_prefix,
+        description_tmpl = ("{} {} should be {{}} {{:0.0f}}{}, got {{:0.0f}}{} instead").format(msg_prefix,
                                                                            metric_name,
                                                                            unit_name,
                                                                            unit_name)\
@@ -1655,7 +1654,7 @@ class MetricNotificationCheck(models.Model):
                 msg = "{} {} {}".format(
                     def_msg, int(self.max_value), unit_name)
                 description = description_tmpl.format(
-                    'at most', self.min_value, v)
+                    'at most', self.max_value, v) 
                 raise self.MetricValueError(
                     metric, self, msg, v, self.max_value, description)
 
