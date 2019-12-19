@@ -189,8 +189,8 @@ class SmokeTest(GeoNodeBaseTestSupport):
         Tests the resources method on a Group object.
         """
 
-        layer = Layer.objects.all()[0]
-        map = Map.objects.all()[0]
+        layer = Layer.objects.all().first()
+        map = Map.objects.all().first()
 
         perm_spec = {'groups': {'bar': ['change_resourcebase']}}
         # Give the self.bar group write perms on the layer
@@ -198,22 +198,21 @@ class SmokeTest(GeoNodeBaseTestSupport):
         map.set_permissions(perm_spec)
 
         # Ensure the layer is returned in the group's resources
-        self.assertTrue(layer.get_self_resource() in self.bar.resources())
-        self.assertTrue(map.get_self_resource() in self.bar.resources())
+        resources = self.bar.resources()
+        self.assertIn(layer.get_self_resource(), resources)
+        self.assertIn(map.get_self_resource(), resources)
 
         # Test the resource filter
-        self.assertTrue(
-            layer.get_self_resource() in self.bar.resources(
-                resource_type='layer'))
-        self.assertTrue(
-            map.get_self_resource() not in self.bar.resources(
-                resource_type='layer'))
+        resources = self.bar.resources(resource_type="layer")
+        self.assertIn(layer.get_self_resource(), resources)
+        self.assertNotIn(map.get_self_resource(), resources)
 
         # Revoke permissions on the layer from the self.bar group
         layer.set_permissions({})
 
         # Ensure the layer is no longer returned in the groups resources
-        self.assertFalse(layer.get_self_resource() in self.bar.resources())
+        resources = self.bar.resources()
+        self.assertNotIn(layer.get_self_resource(), resources)
 
     def test_perms_info(self):
         """

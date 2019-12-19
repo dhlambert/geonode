@@ -655,7 +655,7 @@ class BulkPermissionsTests(ResourceTestCaseMixin, GeoNodeBaseTestSupport):
             # Reset GeoFence Rules
             purge_geofence_all()
             geofence_rules_count = get_geofence_rules_count()
-            self.assertTrue(geofence_rules_count == 0)
+            self.assertEqual(geofence_rules_count, 0)
 
             ignore_errors = False
             skip_unadvertised = False
@@ -701,7 +701,7 @@ class BulkPermissionsTests(ResourceTestCaseMixin, GeoNodeBaseTestSupport):
 
             user_auth = base64.b64encode(b"bobby:bob").decode()
             headers = {
-                "Authorization": "Basic {}".format(user_auth)
+                "Authorization": "Basic " + user_auth
             }
 
             # test view_resourcebase permission on anonymous user
