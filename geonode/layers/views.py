@@ -296,7 +296,10 @@ def layer_upload(request, template='upload/layer_upload.html'):
                         err_msg = 'The error could not be parsed'
                         upload_session.error = err_msg
                         logger.error("TypeError: can't pickle traceback objects")
-                    upload_session.traceback = traceback.format_exc(tb)
+                    try:
+                        upload_session.traceback = traceback.format_exc(tb)
+                    except TypeError:
+                        upload_session.traceback = traceback.format_tb(tb)
                     upload_session.context = log_snippet(CONTEXT_LOG_FILE)
                     upload_session.save()
                     out['traceback'] = upload_session.traceback
@@ -352,7 +355,10 @@ def layer_upload(request, template='upload/layer_upload.html'):
         for _k in _keys:
             if _k in out:
                 if isinstance(out[_k], string_types):
-                    out[_k] = out[_k].decode(layer_charset).encode("utf-8")
+                    try:
+                        out[_k] = out[_k].decode(layer_charset).encode("utf-8")
+                    except AttributeError:
+                        pass
                 elif isinstance(out[_k], dict):
                     for key, value in out[_k].items():
                         try:
