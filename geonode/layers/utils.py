@@ -1244,6 +1244,7 @@ def set_layers_permissions(permissions_name, resources_names=None,
                 if not delete_flag:
                     permissions = READ_PERMISSIONS + WRITE_PERMISSIONS
                 else:
+                    logger.info('removing the write permisions')
                     permissions = WRITE_PERMISSIONS
             elif permissions_name.lower() in ('download', 'd'):
                 if not delete_flag:
@@ -1365,7 +1366,15 @@ def set_layers_permissions(permissions_name, resources_names=None,
                                             "It has been skipped." % (g, resource.title)
                                         )
                             # Set final permissions
+                            if users_usernames and users_usernames[0] in perm_spec['users']:
+                                logger.info(perm_spec['users'][users_usernames[0]])
+                            else: 
+                                logger.info('user not found...')
+
+                            logger.info(perm_spec)
                             resource.set_permissions(perm_spec)
+                        
+
                             # self.stdout.write(
                             #     "Final permissions info for the resource %s:\n"
                             #     "%s" % (resource.title, str(perm_spec))

@@ -39,6 +39,11 @@ from uuid import uuid4
 import os.path
 import six
 
+from geonode.base.models import Link
+
+import logging 
+logger = logging.getLogger(__name__)
+
 # This is used to populate the database with the search fixture data. This is
 # primarily used as a first step to generate the json data for the fixture using
 # django's dumpdata
@@ -204,10 +209,21 @@ def create_models(type=None):
             for kw in kws:
                 m.keywords.add(kw)
                 m.save()
+    
+    # logger.info('layer links before the layer stuff')
+    # logger.info(len(Link.objects.all()))
 
     if not type or type == b'layer' or type == 'layer':
+        # logger.info('the length of layer data')
+        # logger.info(len(layer_data))
+        # logger.info(len(users))
+        # count = 0
+        
         for ld, owner, storeType in zip(layer_data, cycle(users), cycle(('coverageStore', 'dataStore'))):
+            # logger.info(('count', count))
+            # count += 1
             title, abstract, name, alternate, (bbox_x0, bbox_x1, bbox_y0, bbox_y1), start, kws, category = ld
+            # logger.info((title, owner, storeType))
             end = start + timedelta(days=365)
             layer = Layer(title=title,
                           abstract=abstract,

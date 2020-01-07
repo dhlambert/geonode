@@ -403,6 +403,9 @@ def cascading_delete(cat, layer_name):
     try:
         if layer_name.find(':') != -1 and len(layer_name.split(':')) == 2:
             workspace, name = layer_name.split(':')
+            logger.info('workspace')
+            logger.info(workspace)
+            logger.info(cat)
             ws = cat.get_workspace(workspace)
             store = None
             try:

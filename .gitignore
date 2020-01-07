@@ -18,6 +18,8 @@ GeoIPCities.dat
 
 docs/i18n/pot/
 
+*.bak
+
 # Static media handling
 *.jshintrc
 geonode/static/.components/

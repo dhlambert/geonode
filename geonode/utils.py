@@ -1151,8 +1151,11 @@ def fixup_shp_columnnames(inShapefile, charset, tempdir=None):
         try:
             for key in list_col.keys():
                 qry = "ALTER TABLE \"{}\" RENAME COLUMN \"".format(inLayer.GetName())
-                qry = qry + key.decode(charset) + "\" TO \"{}\"".format(list_col[key])
-                inDataSource.ExecuteSQL(qry.encode(charset))
+                try:
+                    qry = qry + key.decode(charset) + "\" TO \"{}\"".format(list_col[key])
+                    inDataSource.ExecuteSQL(qry.encode(charset))
+                except AttributeError:
+                    inDataSource.ExecuteSQL((charset))
         except UnicodeDecodeError:
             raise GeoNodeException(
                 "Could not decode SHAPEFILE attributes by using the specified charset '{}'.".format(charset))

@@ -296,7 +296,12 @@ def layer_upload(request, template='upload/layer_upload.html'):
                         err_msg = 'The error could not be parsed'
                         upload_session.error = err_msg
                         logger.error("TypeError: can't pickle traceback objects")
-                    upload_session.traceback = traceback.format_exc(tb)
+                    logger.info('stuffs............................................')
+                    logger.info(tb)
+                    try:
+                        upload_session.traceback = traceback.format_exc(tb)
+                    except TypeError:
+                        upload_session.traceback = traceback.format_tb(tb)
                     upload_session.context = log_snippet(CONTEXT_LOG_FILE)
                     upload_session.save()
                     out['traceback'] = upload_session.traceback
@@ -352,7 +357,10 @@ def layer_upload(request, template='upload/layer_upload.html'):
         for _k in _keys:
             if _k in out:
                 if isinstance(out[_k], string_types):
-                    out[_k] = out[_k].decode(layer_charset).encode("utf-8")
+                    try:
+                        out[_k] = out[_k].decode(layer_charset).encode("utf-8")
+                    except AttributeError:
+                        pass
                 elif isinstance(out[_k], dict):
                     for key, value in out[_k].items():
                         try:
@@ -1289,10 +1297,12 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
         _PERMISSION_MSG_DELETE)
 
     if (request.method == 'GET'):
+        logger.info('got into the get part')
         return render(request, template, context={
             "layer": layer
         })
     if (request.method == 'POST'):
+        logger.info('got into the post part')
         try:
             with transaction.atomic():
                 # Using Tastypie
@@ -1308,11 +1318,14 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
                 result.wait(10)
         except TimeoutError:
             # traceback.print_exc()
+            logger.info('the dreaded TIMEOUT error strikes here')
             pass
         except Exception as e:
+            logger.info('The exeption occured :O')
             traceback.print_exc()
             message = '{0}: {1}.'.format(
                 _('Unable to delete layer'), layer.alternate)
+            logger.info(message)
 
             if 'referenced by layer group' in getattr(e, 'message', ''):
                 message = _(
@@ -1324,6 +1337,7 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
                 request, template, context={"layer": layer})
 
         register_event(request, 'remove', layer)
+        logger.info('sending the 302')
         return HttpResponseRedirect(reverse("layer_browse"))
     else:
         return HttpResponse("Not allowed", status=403)

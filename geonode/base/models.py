@@ -925,6 +925,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         return '{}%'.format(len(filled_fields) * 100 / len(required_fields))
 
     def keyword_list(self):
+        print('here in keyword list...')
         return [kw.name for kw in self.keywords.all()]
 
     def keyword_slug_list(self):
@@ -1055,6 +1056,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
 
     def download_links(self):
         """assemble download links for pycsw"""
+        logger.info('here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         links = []
         for link in self.link_set.all():
             if link.link_type == 'metadata':  # avoid recursion

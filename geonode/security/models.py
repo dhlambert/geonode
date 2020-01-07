@@ -33,7 +33,13 @@ from .utils import (get_users_with_perms,
                     sync_geofence_with_guardian,
                     remove_object_permissions)
 
-logger = logging.getLogger("geonode.security.models")
+# logger = logging.getLogger("geonode.security.models")
+logger = logging.getLogger(__name__)
+
+
+# from geonode.layers.models import Layer
+# from geonode.layers.models import Layer
+# from geonode.base.models import ResourceBase
 
 ADMIN_PERMISSIONS = [
     'view_resourcebase',
@@ -123,7 +129,7 @@ class PermissionLevelMixin(object):
         Remove all the permissions except for the owner and assign the
         view permission to the anonymous group
         """
-        # remove_object_permissions(self)
+        remove_object_permissions(self)
 
         # default permissions for anonymous users
         anonymous_group, created = Group.objects.get_or_create(name='anonymous')
@@ -173,6 +179,8 @@ class PermissionLevelMixin(object):
                 ]
         }
         """
+        logger = logging.getLogger(__name__)
+
         # remove_object_permissions(self)
         if self.__class__.__name__ == 'Layer':
             if settings.OGC_SERVER['default'].get("GEOFENCE_SECURITY_ENABLED", False):
@@ -180,6 +188,15 @@ class PermissionLevelMixin(object):
                     purge_geofence_layer_rules(self.get_self_resource())
                 else:
                     self.get_self_resource().set_dirty_state()
+
+        # layer_after = Layer.objects.get(name='CA')
+        # logger.info(layer.name)
+        # perm_spec = layer_after.get_all_level_info()
+        # if 'test_username' in perm_spec['users']:
+        #     logger.info('YOU BETTA GET HERE!!!!')
+        #     logger.info(perm_spec["users"]['test'])
+        
+        
 
         # default permissions for resource owner
         set_owner_permissions(self)
@@ -193,12 +210,16 @@ class PermissionLevelMixin(object):
                     assign_perm(perm, anonymous_group, self.layer)
                 else:
                     assign_perm(perm, anonymous_group, self.get_self_resource())
+        
 
+   
         # All the other users
         if 'users' in perm_spec:
             for user, perms in perm_spec['users'].items():
+                logger.info(user)
                 user = get_user_model().objects.get(username=user)
                 for perm in perms:
+                    logger.info(('assigning perm', perm))
                     if self.polymorphic_ctype.name == 'layer' and perm in (
                             'change_layer_data', 'change_layer_style',
                             'add_layer', 'change_layer', 'delete_layer',):
@@ -214,6 +235,7 @@ class PermissionLevelMixin(object):
                         if getattr(settings, 'DELAYED_SECURITY_SIGNALS', False):
                             self.layer.set_dirty_state()
                         sync_geofence_with_guardian(self.layer, perms, user=geofence_user)
+
 
         # All the other groups
         if 'groups' in perm_spec:

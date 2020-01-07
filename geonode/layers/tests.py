@@ -1221,16 +1221,23 @@ class SetLayersPermissions(GeoNodeBaseTestSupport):
         # Assing
         layer = Layer.objects.all().first()
         perm_spec = layer.get_all_level_info()
+        logger.info(perm_spec["users"])
         self.assertNotIn(self.user, perm_spec["users"])
         utils.set_layers_permissions("write", None, [self.username], None, None)
         layer_after = Layer.objects.get(name=layer.name)
         perm_spec = layer_after.get_all_level_info()
+        logger.info(perm_spec["users"][self.user])
         for perm in utils.WRITE_PERMISSIONS:
             self.assertIn(perm, perm_spec["users"][self.user])
         # Remove
         utils.set_layers_permissions("write", None, [self.username], None, True)
         layer_after = Layer.objects.get(name=layer.name)
+        # logger.info(layer.name)
         perm_spec = layer_after.get_all_level_info()
+        logger.info('the user')
+        logger.info(self.user)
+        logger.info(perm_spec["users"][self.user])
+
         for perm in utils.WRITE_PERMISSIONS:
             self.assertNotIn(perm, perm_spec["users"][self.user])
 
