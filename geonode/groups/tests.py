@@ -208,7 +208,7 @@ class SmokeTest(GeoNodeBaseTestSupport):
         self.assertNotIn(map.get_self_resource(), resources)
 
         # Revoke permissions on the layer from the self.bar group
-        layer.set_permissions({})
+        layer.set_permissions("{}")
 
         # Ensure the layer is no longer returned in the groups resources
         resources = self.bar.resources()

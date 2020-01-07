@@ -173,7 +173,8 @@ class PermissionLevelMixin(object):
                 ]
         }
         """
-        # remove_object_permissions(self)
+        remove_object_permissions(self)
+
         if self.__class__.__name__ == 'Layer':
             if settings.OGC_SERVER['default'].get("GEOFENCE_SECURITY_ENABLED", False):
                 if not getattr(settings, 'DELAYED_SECURITY_SIGNALS', False):
