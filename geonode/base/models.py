@@ -739,7 +739,10 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         default='dataset',
         null=False,
         choices=HIERARCHY_LEVELS)
-    csw_anytext = models.TextField(_('CSW anytext'), null=True, blank=True)
+    csw_anytext = models.TextField(
+        _('CSW anytext'),
+        null=True,
+        blank=True)
     csw_wkt_geometry = models.TextField(
         _('CSW WKT geometry'),
         null=False,
@@ -1492,6 +1495,7 @@ def resourcebase_post_save(instance, *args, **kwargs):
     Used to fill any additional fields after the save.
     Has to be called by the children
     """
+    logger.info((instance, instance.uuid))
     try:
         # set default License if no specified
         if instance.license is None:
