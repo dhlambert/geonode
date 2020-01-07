@@ -739,7 +739,10 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin, ItemBase):
         default='dataset',
         null=False,
         choices=HIERARCHY_LEVELS)
-    csw_anytext = models.TextField(_('CSW anytext'), null=True, blank=True)
+    csw_anytext = models.TextField(
+        _('CSW anytext'),
+        null=True,
+        blank=True)
     csw_wkt_geometry = models.TextField(
         _('CSW WKT geometry'),
         null=False,
