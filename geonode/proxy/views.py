@@ -359,7 +359,7 @@ def download(request, resourceid, sender=Layer):
             zip_dir(target_folder, target_file)
             register_event(request, 'download', instance)
             response = HttpResponse(
-                content=open(target_file),
+                content=open(target_file, 'rb'),
                 status=200,
                 content_type="application/zip")
             response['Content-Disposition'] = 'attachment; filename="%s"' % target_file_name

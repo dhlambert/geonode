@@ -1304,6 +1304,7 @@ class GeoNodeGeoServerSync(GeoNodeLiveTestSupport):
     def setUp(self):
         super(GeoNodeLiveTestSupport, self).setUp()
         settings.OGC_SERVER['default']['GEOFENCE_SECURITY_ENABLED'] = True
+        self.client.login(username="admin", password="admin")
 
     @on_ogc_backend(geoserver.BACKEND_PACKAGE)
     @timeout_decorator.timeout(LOCAL_TIMEOUT)
