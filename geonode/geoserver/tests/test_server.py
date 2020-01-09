@@ -591,8 +591,8 @@ class LayerTests(GeoNodeBaseTestSupport):
                       "raster.sld",
                       "line.sld",):
                 path = os.path.join(d, f)
-                f = open(path, "wb")
-                f.write(SLDS[basename(path).split('.')[0]].encode())
+                f = open(path, "w")
+                f.write(SLDS[basename(path).split('.')[0]])
                 f.close()
 
             # Test 'san_andres_y_providencia.sld'

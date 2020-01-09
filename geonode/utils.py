@@ -1086,48 +1086,45 @@ def fixup_shp_columnnames(inShapefile, charset, tempdir=None):
     """ Try to fix column names and warn the user
     """
 
-    if not tempdir:
-        tempdir = tempfile.mkdtemp()
     if is_zipfile(inShapefile):
-        inShapefile = unzip_file(inShapefile, '.shp', tempdir=tempdir)
+        inShapefile = unzip_file(
+            inShapefile,
+            '.shp',
+            tempdir=tempdir if tempdir else tempfile.mkdtemp()
+        )
 
     inDriver = ogr.GetDriverByName('ESRI Shapefile')
     try:
-        inDataSource = inDriver.Open(inShapefile, 1)
+        inDataSource = inDriver.Open(inShapefile, 1) # R/W
     except BaseException:
         tb = traceback.format_exc()
         logger.debug(tb)
         inDataSource = None
+        
     if inDataSource is None:
         logger.debug('Could not open %s' % (inShapefile))
         return False, None, None
-    else:
-        inLayer = inDataSource.GetLayer()
+
+    inLayer = inDataSource.GetLayer()
+    inLayerDefn = inLayer.GetLayerDefn()
+    table = inLayer.GetName()
 
     # TODO we may need to improve this regexp
     # first character must be any letter or "_"
     # following characters can be any letter, number, "#", ":"
-    regex = r'^[a-zA-Z,_][a-zA-Z,_,#,:\d]*$'
+    regex = r'^[a-zA-Z_][\w#:]*$'
     a = re.compile(regex)
-    regex_first_char = r'[a-zA-Z,_]{1}'
+    regex_first_char = r'^[a-zA-Z_]'
     b = re.compile(regex_first_char)
-    inLayerDefn = inLayer.GetLayerDefn()
 
-    list_col_original = []
+    charset = charset if charset and "undefined" not in charset else "UTF-8"
+
+    field_names = [inLayerDefn.GetFieldDefn(i).GetName() for i in range(inLayerDefn.GetFieldCount())]
+    list_col_original = {fn for fn in field_names if a.match(fn)}
     list_col = {}
 
-    for i in range(0, inLayerDefn.GetFieldCount()):
-        field_name = inLayerDefn.GetFieldDefn(i).GetName()
-
-        if a.match(field_name):
-            list_col_original.append(field_name)
-
-    for i in range(0, inLayerDefn.GetFieldCount()):
-        charset = charset if charset and 'undefined' not in charset \
-            else 'UTF-8'
-
-        field_name = inLayerDefn.GetFieldDefn(i).GetName()
-        if not a.match(field_name):
+    for field_name in field_names:
+        if field_name not in list_col_original:
             # once the field_name contains Chinese, to use slugify_zh
             has_ch = any('\u4e00' <= ch <= '\u9fff' for ch in field_name)
             if has_ch:
@@ -1143,19 +1140,15 @@ def fixup_shp_columnnames(inShapefile, charset, tempdir=None):
                 if new_field_name.endswith('_' + str(j)):
                     j += 1
                     new_field_name = new_field_name[:-2] + '_' + str(j)
-            list_col.update({field_name: new_field_name})
+            list_col[field_name] = new_field_name
 
     if len(list_col) == 0:
         return True, None, None
-    else:
-        try:
-            for key in list_col.keys():
-                qry = "ALTER TABLE \"{}\" RENAME COLUMN \"".format(inLayer.GetName())
-                qry = qry + key.decode(charset) + "\" TO \"{}\"".format(list_col[key])
-                inDataSource.ExecuteSQL(qry.encode(charset))
-        except UnicodeDecodeError:
-            raise GeoNodeException(
-                "Could not decode SHAPEFILE attributes by using the specified charset '{}'.".format(charset))
+
+    for key, value in list_col.items():
+        qry = 'ALTER TABLE "{}" RENAME COLUMN "{}" TO "{}"'.format(table, key, value)
+        inDataSource.ExecuteSQL(qry)
+
     return True, None, list_col
 
 

@@ -200,7 +200,10 @@ def extract_name_from_sld(gs_catalog, sld, sld_file=None):
         if sld:
             if isfile(sld):
                 sld = open(sld, "r").read()
-            dom = etree.XML(sld)
+            if isinstance(sld, str):
+                # This case is for when sld is an xml string with encoding tag
+                sld = sld.encode()
+            dom = etree.XML(sld) 
         elif sld_file and isfile(sld_file):
             sld = open(sld_file, "r").read()
             dom = dlxml.parse(sld_file)
