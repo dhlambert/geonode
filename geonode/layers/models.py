@@ -476,7 +476,7 @@ class Attribute(models.Model):
     objects = AttributeManager()
 
     def __str__(self):
-        return self.attribute_label
+        return str(self.attribute_label)
 
     def unique_values_as_list(self):
         return self.unique_values.split(',')

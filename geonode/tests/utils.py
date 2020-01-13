@@ -142,7 +142,7 @@ class Client(DjangoTestClient):
         except requests.HTTPError as ex:
             with open('last_error.html', 'wb') as outfl:
                 outfl.write(response.content)
-                raise KeyError(response.url)
+                # raise KeyError(response.url)
                 
 
             #logger.info(response.content)

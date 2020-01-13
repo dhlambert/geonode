@@ -632,7 +632,7 @@ _steps = {
 }
 
 
-# login_required@
+@login_required
 def view(req, step):
     """Main uploader view"""
 
