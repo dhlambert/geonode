@@ -379,8 +379,6 @@ def layer_upload(request, template='upload/layer_upload.html'):
 
 
 def layer_detail(request, layername, template='layers/layer_detail.html'):
-    logger.info('in the layer details!!!||||||||||||||||||||| ||||||||||||||||||||||||||||+++++++++++++++++++++++||||||||||||||||||||||')
-
     layer = _resolve_layer(
         request,
         layername,

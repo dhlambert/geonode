@@ -75,8 +75,6 @@ GEONODE_URL = settings.SITEURL.rstrip('/')
 GEOSERVER_URL = ogc_server_settings.LOCATION
 GEOSERVER_USER, GEOSERVER_PASSWD = ogc_server_settings.credentials
 
-print('in the settings........................+++++++++++++++++++++++++++++32333333333333333333333333333333333333333333333333332222222222222222222222222222222221111111111111111111111111111111111111')
-
 DB_HOST = settings.DATABASES['default']['HOST']
 DB_PORT = settings.DATABASES['default']['PORT']
 DB_NAME = settings.DATABASES['default']['NAME']
@@ -180,27 +178,21 @@ class UploaderBase(GeoNodeLiveTestSupport):
             os.unlink(temp_file)
 
         # Cleanup
-        # Upload.objects.all().delete()
-        # Layer.objects.all().delete()
-        # Map.objects.all().delete()
-        # Document.objects.all().delete()
+        Upload.objects.all().delete()
+        Layer.objects.all().delete()
+        Map.objects.all().delete()
+        Document.objects.all().delete()
 
         if settings.OGC_SERVER['default'].get(
                 "GEOFENCE_SECURITY_ENABLED", False):
             from geonode.security.utils import purge_geofence_all
-            # purge_geofence_all()
+            purge_geofence_all()
 
     def check_layer_geonode_page(self, path):
         """ Check that the final layer page render's correctly after
         an layer is uploaded """
         # the final url for uploader process. This does a redirect to
-        # the final layer page in geonodel
-        logger.info('path======+++++++++++++++++++++========++++====+++===+++===++===++====++===++===+++=====')
-        logger.info(path)
-
-        more_stuff2 = Layer.objects.all()
-        logger.info('more stuff 2 (((((((((((((((((((((((()))))999999999999999((((((((((((((((((((((9999999999999((((((((((9999999(((((99))))))))))))))))))))))))))))))))))))))))))))))))))))))))')
-        logger.info(more_stuff2)
+        # the final layer page in geonode
         resp, _ = self.client.get_html(path)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('content-type' in resp.headers)
@@ -267,10 +259,6 @@ class UploaderBase(GeoNodeLiveTestSupport):
                 data['redirect_to'],
                 layer_name,
                 is_raster)
-            
-            more_stuff = Layer.objects.all()
-            logger.info('more stuff (((((((((((((((((((((((()))))999999999999999((((((((((((((((((((((9999999999999((((((((((9999999(((((99))))))))))))))))))))))))))))))))))))))))))))))))))))))))')
-            logger.info(more_stuff)
 
             self.check_layer_complete(layer_page, layer_name)
 
@@ -424,15 +412,7 @@ class UploaderBase(GeoNodeLiveTestSupport):
                         session_ids += [session_id]
         if not isinstance(data, string_types):
             self.wait_for_progress(data.get('progress'))
-        stuff = Layer.objects.all()
-        logger.info('all the layers @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-        logger.info(stuff)
-        if resp.status_code > 299:
-            raise KeyError(resp.content)
         final_check(check_name, resp, data)
-        stuff2 = Layer.objects.all()
-        logger.info('all the layers 2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-        logger.info(stuff2)
 
     def wait_for_progress(self, progress_url):
         if progress_url:
@@ -788,11 +768,3 @@ class TestUploadDBDataStore(UploaderBase):
                 self.assertTrue('error_msg' in resp_js)
                 self.assertTrue(
                     'Source SRS is not valid' in resp_js['error_msg'])
-
-
-from django.test import TestCase
-
-class AnimalTestCase(TestCase):
-    def test_tests(self):
-        resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 200)

@@ -226,17 +226,17 @@ class MonitoringTestBase(GeoNodeLiveTestSupport):
             os.unlink(temp_file)
 
         # Cleanup
-        # Layer.objects.all().delete()
-        # Map.objects.all().delete()
-        # Document.objects.all().delete()
+        Layer.objects.all().delete()
+        Map.objects.all().delete()
+        Document.objects.all().delete()
 
-        # MetricValue.objects.all().delete()
-        # ExceptionEvent.objects.all().delete()
-        # RequestEvent.objects.all().delete()
-        # MonitoredResource.objects.all().delete()
-        # NotificationCheck.objects.all().delete()
-        # Service.objects.all().delete()
-        # Host.objects.all().delete()
+        MetricValue.objects.all().delete()
+        ExceptionEvent.objects.all().delete()
+        RequestEvent.objects.all().delete()
+        MonitoredResource.objects.all().delete()
+        NotificationCheck.objects.all().delete()
+        Service.objects.all().delete()
+        Host.objects.all().delete()
 
         from django.conf import settings
         if settings.OGC_SERVER['default'].get(

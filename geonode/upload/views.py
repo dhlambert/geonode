@@ -157,7 +157,6 @@ def _select_relevant_files(allowed_extensions, files):
 
 
 def save_step_view(req, session):
-    logger.info('in the save step veiw=======++++++++++++++=======++++++++++++++++++++=========++++++++++++========= 555555555555555555555555555555555')
     if req.method == 'GET':
         return render(
             req,
@@ -206,7 +205,6 @@ def save_step_view(req, session):
             charset_encoding=form.cleaned_data["charset"]
         )
         import_session.tasks[0].set_charset(form.cleaned_data["charset"])
-     
         sld = None
         if spatial_files[0].sld_files:
             sld = spatial_files[0].sld_files[0]
@@ -239,9 +237,6 @@ def save_step_view(req, session):
             mosaic_time_value=form.cleaned_data['mosaic_time_value'],
             user=req.user
         )
-
-        print('the uploader session..: ))))))))(###########################################33333333##################)')
-        print(upload_session)
         Upload.objects.update_from_session(upload_session)
         return next_step_response(req, upload_session, force_ajax=True)
     else:
@@ -635,8 +630,6 @@ _steps = {
 @login_required
 def view(req, step):
     """Main uploader view"""
-
-    logger.info('in the main uploader view....8888888888888888888888888888888888888888888')
     from django.contrib import auth
     if not auth.get_user(req).is_authenticated():
         return error_response(req, errors=["Not Authorized"])
@@ -668,7 +661,6 @@ def view(req, step):
 
         upload_obj = get_object_or_404(
             Upload, import_id=upload_id, user=req.user)
-        logger.info('the get session call is here ########4$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$93###(((((((((((((((())))))))))))))))')
         session = upload_obj.get_session()
         try:
             if session:

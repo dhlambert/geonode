@@ -123,14 +123,14 @@ n_layers = 500
 n_docs = 500
 
 # Reset keywords
-# Tag.objects.all().delete()
+Tag.objects.all().delete()
 
 # 1. create users
 Profile.objects.exclude(username='admin').exclude(username='AnonymousUser').delete()
 create_users(n_users)
 
 # 2. create documents
-# Document.objects.all().delete()
+Document.objects.all().delete()
 for d in range(0, n_docs):
     t = Timer(lambda: create_document(d))
     print('Document %s generated in: %s' % (d, t.timeit(number=1)))
