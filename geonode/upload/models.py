@@ -52,7 +52,7 @@ class UploadManager(models.Manager):
             complete=False).exclude(
             state=Upload.STATE_INVALID)
 
-
+import codecs
 class Upload(models.Model):
     objects = UploadManager()
 
@@ -86,8 +86,18 @@ class Upload(models.Model):
     STATE_INVALID = 'INVALID'
 
     def get_session(self):
+        # print('da session!!')
+        # print(self.session)
+        # print('the encoded session.....................=================================')
+        # print(self.session.encode("utf-8", "replace"))
         if self.session:
-            return pickle.loads(self.session.encode("utf-8", "replace"))
+            # print('decoded+==================================')
+            # # print(pickle.loads(self.session.encode("utf-8", "replace"), encoding='latin-1'))
+            # print(pickle.loads(self.session))
+            # print('not decoded===============================')
+            # print(pickle.loads(self.session.encode("utf-8", "replace")))
+            return pickle.loads(codecs.decode(self.session.encode(), "base64"))
+            # return 1
 
     def update_from_session(self, upload_session):
         self.state = upload_session.import_session.state
@@ -97,10 +107,23 @@ class Upload(models.Model):
             self.session = None
         else:
             # Make sure we don't pickle UTF-8 chars
-            upload_session.user.first_name = upload_session.user.first_name.encode("ascii", "ignore")
-            upload_session.user.last_name = upload_session.user.last_name.encode("ascii", "ignore")
-            unicode_session = pickle.dumps(upload_session)
-            self.session = unicode_session.decode("utf-8", "replace")
+            # try:
+            #     upload_session.user.first_name = upload_session.user.first_name.encode("utf-8")
+            #     upload_session.user.last_name = upload_session.user.last_name.encode("utf-8")
+            # except AttributeError:
+            #     pass
+
+            # print('da uploading session before it was  unicoded in the upating sessions function 7777777777777777y0000000000000000033333333333')
+            # print(upload_session)
+            unicode_session = codecs.encode(pickle.dumps(upload_session, protocol=pickle.HIGHEST_PROTOCOL), "base64")
+            #print('da uploading session in the upating sessions function 7777777777777777y0000000000000000033333333333')
+            #print(pickle.loads(unicode_session.decode("latin-1").encode('latin-1')))
+            #print(unicode_session.decode("latin-1"))
+            # print(upload_session)
+            # print(unicode_session)
+            # print(unicode_session.decode("utf-8", "replace"))
+            self.session = unicode_session.decode()
+
         if self.upload_dir is None:
             self.upload_dir = path.dirname(upload_session.base_file)
             self.name = upload_session.layer_title or upload_session.name

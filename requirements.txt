@@ -87,7 +87,7 @@ arcrest>=10.0
 geonode-dialogos==3.0
 # geoserver-restconfig==1.0.5
 git+git://github.com/GeoNode/geoserver-restconfig.git#egg=geoserver-restconfig
-# gn-gsimporter==1.0.15
+# gn-gsimporter==1.0.17
 git+git://github.com/GeoNode/gsimporter.git#egg=gn-gsimporter
 gisdata==0.5.4
 

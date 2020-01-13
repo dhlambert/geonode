@@ -1,0 +1,76 @@
+http://localhost:8000/
+get-----------------------
+<Response [200]>
+uploading the file--------------------------
+http://localhost:8000/
+get-----------------------
+<Response [200]>
+http://localhost:8000/account/login/
+posting-----------------------
+<Response [200]>
+http://localhost:8000/
+get-----------------------
+<Response [200]>
+just before making the request.........
+gots to the uploading step..
+('the step: ', '/upload/')
+http://localhost:8000/upload/?force_ajax=true
+posting-----------------------
+<Response [200]>
+all the layers @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+<MultilingualPolymorphicQuerySet []>
+gots to the uploading step..
+('the step: ', '/upload/final')
+http://localhost:8000/upload/final?id=5
+get-----------------------
+<Response [200]>
+more stuff (((((((((((((((((((((((()))))999999999999999((((((((((((((((((((((9999999999999((((((((((9999999(((((99))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+<MultilingualPolymorphicQuerySet []>
+path======+++++++++++++++++++++========++++====+++===+++===++===++====++===++===+++=====
+/layers/relief_san_andres16:geonode:relief_san_andres16
+more stuff 2 (((((((((((((((((((((((()))))999999999999999((((((((((((((((((((((9999999999999((((((((((9999999(((((99))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+<MultilingualPolymorphicQuerySet []>
+http://localhost:8000/layers/relief_san_andres16:geonode:relief_san_andres16
+get-----------------------
+<Response [500]>
+error in request to /layers/relief_san_andres16:geonode:relief_san_andres16
+Internal Server Error for url: http://localhost:8000/layers/relief_san_andres16:geonode:relief_san_andres16
+E
+======================================================================
+ERROR: test_raster_upload (geonode.upload.tests.integration.TestUpload)
+Tests if a raster layer can be upload to a running GeoNode GeoServer
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/tests/utils.py", line 141, in make_request
+    response.raise_for_status()
+  File "/home/danalambert/Documents/GIS/py3env/lib/python3.6/site-packages/requests/models.py", line 940, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://localhost:8000/layers/relief_san_andres16:geonode:relief_san_andres16
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 549, in test_raster_upload
+    check_name='relief_san_andres')
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 432, in upload_file
+    final_check(check_name, resp, data)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 240, in complete_raster_upload
+    return self.complete_upload(file_path, resp, data, is_raster=True)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 275, in complete_upload
+    self.check_layer_complete(layer_page, layer_name)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 338, in check_layer_complete
+    self.check_layer_geonode_page(layer_page)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/upload/tests/integration.py", line 204, in check_layer_geonode_page
+    resp, _ = self.client.get_html(path)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/tests/utils.py", line 220, in get_html
+    resp = self.get(path, debug)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/tests/utils.py", line 153, in get
+    return self.make_request(path, debug=debug)
+  File "/home/danalambert/Documents/GIS/GeoNode/geonode/geonode/tests/utils.py", line 148, in make_request
+    raise HTTPError(url, response.status_code, msg, response.headers, None)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error for url: http://localhost:8000/layers/relief_san_andres16:geonode:relief_san_andres16
+
+----------------------------------------------------------------------
+Ran 1 test in 3.793s
+
+FAILED (errors=1)

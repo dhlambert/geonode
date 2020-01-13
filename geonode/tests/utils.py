@@ -72,7 +72,9 @@ logger = logging.getLogger(__name__)
 
 
 def upload_step(step=None):
+    logger.info('gots to the uploading step..')
     step = reverse('data_upload', args=[step] if step else [])
+    logger.info(('the step: ', step))
     return step
 
 
@@ -116,27 +118,41 @@ class Client(DjangoTestClient):
         if self.response_cookies:
             self._session.headers['cookie'] = self.response_cookies
 
+        logger.info(url)
+
         if data:
+            logger.info('posting-----------------------')
             for name, value in data.items():
+                # logger.info(('name', name))
+                # logger.info(('value out', value))
                 if isinstance(value, io.IOBase):
+                    # logger.info(('value in', value))
                     data[name] = (os.path.basename(value.name), value)
 
             encoder = MultipartEncoder(fields=data)
             self._session.headers['Content-Type'] = encoder.content_type
             response = self._session.post(url, data=encoder)
         else:
+            logger.info('get-----------------------')
             response = self._session.get(url)
 
+        logger.info(response)
         try:
             response.raise_for_status()
         except requests.HTTPError as ex:
+            with open('last_error.html', 'wb') as outfl:
+                outfl.write(response.content)
+                raise KeyError(response.url)
+                
+
+            #logger.info(response.content)
             msg = str(ex)
             msg = msg[msg.index(':')+2:]
             if debug:
                 logger.error('error in request to %s' % path)
                 logger.error(msg)
             raise HTTPError(url, response.status_code, msg, response.headers, None)
-
+            
         return response
 
     def get(self, path, debug=True):
@@ -162,6 +178,8 @@ class Client(DjangoTestClient):
     def upload_file(self, _file):
         """ function that uploads a file, or a collection of files, to
         the GeoNode"""
+
+        logger.info('uploading the file--------------------------')
         if not self.csrf_token:
             self.login()
         spatial_files = ("dbf_file", "shx_file", "prj_file")
@@ -189,6 +207,7 @@ class Client(DjangoTestClient):
 
         base_file = open(_file, 'rb')
         params['base_file'] = base_file
+        logger.info('just before making the request.........')
         resp = self.make_request(
             upload_step(),
             data=params,
@@ -205,6 +224,9 @@ class Client(DjangoTestClient):
         Takes a path and returns a tuple
         """
         resp = self.get(path, debug)
+        if resp.status_code > 300:
+            raise KeyError(resp.content)
+
         return resp, BeautifulSoup(resp.content, features="lxml")
 
     def get_json(self, path):

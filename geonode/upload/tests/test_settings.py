@@ -191,7 +191,7 @@ UPLOADER = {
 }
 
 # Settings for MONITORING plugin
-MONITORING_ENABLED = True
+MONITORING_ENABLED = False
 USER_ANALYTICS_ENABLED = True
 USER_ANALYTICS_GZIP = True
 
@@ -212,3 +212,24 @@ if MONITORING_ENABLED:
     if 'geonode.monitoring.middleware.MonitoringMiddleware' not in MIDDLEWARE_CLASSES:
         MIDDLEWARE_CLASSES += \
             ('geonode.monitoring.middleware.MonitoringMiddleware',)
+
+    # skip certain paths to not to mud stats too much
+    MONITORING_SKIP_PATHS = ('/api/o/',
+                            '/monitoring/',
+                            '/admin',
+                            '/jsi18n',
+                            STATIC_URL,
+                            MEDIA_URL,
+                            re.compile('^/[a-z]{2}/admin/'),
+                            )
+
+    # configure aggregation of past data to control data resolution
+    # list of data age, aggregation, in reverse order
+    # for current data, 1 minute resolution
+    # for data older than 1 day, 1-hour resolution
+    # for data older than 2 weeks, 1 day resolution
+    MONITORING_DATA_AGGREGATION = (
+        (timedelta(seconds=0), timedelta(minutes=1),),
+        (timedelta(days=1), timedelta(minutes=60),),
+        (timedelta(days=14), timedelta(days=1),),
+    )

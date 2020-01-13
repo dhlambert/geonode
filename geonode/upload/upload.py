@@ -96,7 +96,7 @@ class UploaderSession(object):
     name = None
 
     # the input file charset
-    charset = 'UTF-8'
+    charset = 'latin-1'
 
     # blob of permissions JSON
     permissions = None
@@ -179,6 +179,7 @@ def upload(
         user = get_default_user()
     if isinstance(user, string_types):
         user = get_user_model().objects.get(username=user)
+    print('gots to teh uploading part.....8888888333333333333333333888888888888883333333333333333333333333333333333333333333338')
     import_session = save_step(
         user,
         name,
@@ -216,6 +217,7 @@ def upload(
 
     utils.run_import(upload_session, async_upload=False)
 
+    print('got to the final step +++++++++=======++++====++===++===++==+===+==+++++=++++==')
     final_step(upload_session, user, charset=charset)
 
 
@@ -358,6 +360,10 @@ def save_step(user, layer, spatial_files, overwrite=True, mosaic=False,
                 error_msg = 'No valid Importer Session could be found'
         else:
             # moving forward with a regular Importer session
+            logger.info('charset encoding+++++)0000000000000000000000000000000')
+            logger.info(charset_encoding)
+            logger.info(files_to_upload)
+            logger.info(next_id)
             import_session = gs_uploader.upload_files(
                 files_to_upload,
                 use_url=False,
@@ -366,6 +372,7 @@ def save_step(user, layer, spatial_files, overwrite=True, mosaic=False,
                 target_store=None,
                 charset_encoding=charset_encoding
             )
+
         upload.import_id = import_session.id
         upload.save()
 
@@ -412,6 +419,9 @@ def save_step(user, layer, spatial_files, overwrite=True, mosaic=False,
         raise UploadException(error_msg)
     else:
         _log("Finished upload of [%s] to GeoServer without errors.", name)
+
+    print('the import session _----------------_____------___----__---__--___--___--------000003333333333')
+    print(import_session)
 
     return import_session
 
@@ -551,8 +561,10 @@ def srs_step(upload_session, source, target):
 
 
 def final_step(upload_session, user, charset="UTF-8"):
+    print('the final step @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     from geonode.geoserver.helpers import get_sld_for
     import_session = upload_session.import_session
+
     _log('Reloading session %s to check validity', import_session.id)
     import_session = import_session.reload()
     upload_session.import_session = import_session
